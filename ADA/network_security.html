@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Security and Computing Infrastructures - Study Guide</title>
+<style>
+:root{
+  --bg:#0f172a;
+  --panel:#111827;
+  --panel-2:#1f2937;
+  --text:#e5e7eb;
+  --muted:#cbd5e1;
+  --soft:#94a3b8;
+  --line:#334155;
+  --accent:#f59e0b;
+  --accent-2:#22c55e;
+  --card:#0b1220;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
+a{color:#93c5fd;text-decoration:none}
+a:hover{text-decoration:underline}
+.layout{
+  display:grid;
+  grid-template-columns: 320px 1fr;
+  min-height:100vh;
+}
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:auto;
+  background:linear-gradient(180deg,#0b1020,#111827);
+  border-right:1px solid var(--line);
+  padding:22px 18px 28px;
+}
+.sidebar h1{
+  margin:0 0 8px;
+  font-size:1.3rem;
+  line-height:1.25;
+}
+.sidebar .sub{
+  color:var(--muted);
+  font-size:.95rem;
+  margin-bottom:16px;
+}
+.search{
+  width:100%;
+  padding:11px 12px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#0b1220;
+  color:var(--text);
+  outline:none;
+  margin-bottom:14px;
+}
+.nav-group{
+  margin-top:10px;
+}
+.nav-group h2{
+  margin:16px 0 8px;
+  font-size:.82rem;
+  color:var(--soft);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.nav-link{
+  display:block;
+  padding:9px 10px;
+  margin:4px 0;
+  border-radius:10px;
+  color:var(--text);
+  font-size:.96rem;
+}
+.nav-link:hover{background:rgba(148,163,184,.12); text-decoration:none}
+.main{
+  padding:34px clamp(18px,4vw,48px) 60px;
+  max-width:1100px;
+}
+.hero{
+  background:linear-gradient(180deg, rgba(245,158,11,.14), rgba(245,158,11,.06));
+  border:1px solid rgba(245,158,11,.25);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:28px;
+}
+.hero h2{
+  margin:0 0 8px;
+  font-size:2rem;
+  line-height:1.15;
+}
+.hero p{margin:.45rem 0;color:var(--muted)}
+.card{
+  background:rgba(15,23,42,.65);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  margin:0 0 22px;
+}
+.card h2{
+  margin:0 0 14px;
+  font-size:1.6rem;
+  line-height:1.2;
+}
+.card h3{
+  margin:20px 0 10px;
+  font-size:1.18rem;
+  line-height:1.3;
+}
+.card h4{
+  margin:14px 0 8px;
+  font-size:1rem;
+  color:#fef3c7;
+}
+p{margin:.55rem 0}
+ul{margin:.35rem 0 .7rem 1.2rem}
+li{margin:.25rem 0}
+strong{color:#fff7ed}
+.callout{
+  border-left:4px solid var(--accent);
+  background:rgba(245,158,11,.08);
+  padding:12px 14px;
+  border-radius:10px;
+  margin:12px 0 16px;
+}
+.example{
+  border-left:4px solid var(--accent-2);
+  background:rgba(34,197,94,.08);
+  padding:12px 14px;
+  border-radius:10px;
+  margin:12px 0 16px;
+}
+.takeaway{
+  margin-top:18px;
+  border:1px solid rgba(34,197,94,.3);
+  background:rgba(34,197,94,.08);
+  border-radius:12px;
+  padding:12px 14px;
+}
+.takeaway-title{
+  font-weight:700;
+  color:#dcfce7;
+  margin-bottom:4px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:12px 0 16px;
+  font-size:.95rem;
+}
+th,td{
+  border:1px solid var(--line);
+  padding:10px 12px;
+  vertical-align:top;
+}
+th{
+  background:#172033;
+  text-align:left;
+  color:#fde68a;
+}
+td{background:rgba(2,6,23,.35)}
+.code{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background:#0b1220;
+  padding:2px 6px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  white-space:nowrap;
+}
+.small{font-size:.92rem;color:var(--muted)}
+.hidden-by-search{display:none !important}
+.footer-note{
+  margin-top:28px;
+  color:var(--soft);
+  font-size:.92rem;
+}
+@media (max-width: 980px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{
+    position:relative;
+    height:auto;
+    border-right:none;
+    border-bottom:1px solid var(--line);
+  }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <h1>Network Security and Computing Infrastructures</h1>
+    <div class="sub">Expanded study notes based on the uploaded ISM 6225 slide deck.</div>
+    <input id="searchBox" class="search" type="text" placeholder="Filter sections...">
+    <div class="nav-group">
+      <h2>Study Guide</h2>
+      <a class="nav-link" href="#overview">1. Course Overview</a>
+      <a class="nav-link" href="#cia">2. Information Security Foundations</a>
+      <a class="nav-link" href="#controls">3. Network Security Controls</a>
+      <a class="nav-link" href="#encryption">4. Encryption, SSH, and Integrity</a>
+      <a class="nav-link" href="#availability">5. Availability and Redundancy</a>
+      <a class="nav-link" href="#computer-basics">6. Modern Computing Foundations</a>
+      <a class="nav-link" href="#virtualization">7. Scaling, VMs, Containers, Cloud</a>
+      <a class="nav-link" href="#exam">8. Exam-Focused Wrap-Up</a>
+    </div>
+    <div class="nav-group">
+      <h2>How to Use</h2>
+      <div class="small">Read each section in order. Use the filter box to jump to specific topics like <span class="code">TLS</span>, <span class="code">DMZ</span>, <span class="code">virtual machines</span>, or <span class="code">cloud models</span>.</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="hero">
+      <h2>Comprehensive Study Notes</h2>
+      <p><strong>Source deck:</strong> ISM 6225 - <em>Network Security and computing infrastructures</em> (based on Agrawal and Sharma, Prospect Press).</p>
+      <p>These notes reorganize the slide deck into a teaching-first structure: definitions come first, then controls and examples, then the computing infrastructure material. Diagram-heavy slides have been converted into text walkthroughs and study tables so you can revise from this file without reopening the slides.</p>
+    </section>
+
+    <section id="overview" class="card searchable">
+      <h2>1. Course Overview</h2>
+      <p>This slide deck is really two connected mini-units:</p>
+      <ul>
+        <li><strong>Part A: Network security</strong> - how organizations protect data as it enters and leaves networked systems.</li>
+        <li><strong>Part B: Computing infrastructures</strong> - the hardware, operating-system, and platform concepts that make modern digital services possible.</li>
+      </ul>
+      <p>The bridge between the two parts is simple: <strong>security depends on infrastructure</strong>. You cannot secure systems well unless you understand what is being secured - applications, operating systems, networks, virtual machines, cloud platforms, and the data that moves among them.</p>
+
+      <div class="callout">
+        <strong>How the material is organized conceptually:</strong><br>
+        1) Define what must be protected, 2) identify what can go wrong, 3) apply controls, and 4) scale those controls across real computing environments.
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-title">Key Takeaway</div>
+        The deck is not just about “hacking” or “cloud.” It teaches a full chain: <strong>information security goals -> network threats -> controls -> infrastructure needed to run secure systems at scale.</strong>
+      </div>
+    </section>
+
+    <section id="cia" class="card searchable">
+      <h2>2. Information Security Foundations</h2>
+
+      <h3>2.1 Network security sits inside information security</h3>
+      <p>The deck defines <strong>network security</strong> as one part of the broader field of <strong>information security</strong>. Information security asks a basic question: what properties must information have to remain useful and trustworthy? The answer is the classic <strong>CIA triad</strong>:</p>
+
+      <table>
+        <thead>
+          <tr><th>Security Goal</th><th>Meaning</th><th>What failure looks like</th><th>Real-world example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Confidentiality</strong></td>
+            <td>Only authorized people or systems should be able to view the data.</td>
+            <td>A private file, password, or customer record is exposed to unauthorized parties.</td>
+            <td>A payroll spreadsheet is leaked because it was emailed without encryption.</td>
+          </tr>
+          <tr>
+            <td><strong>Integrity</strong></td>
+            <td>Data should not be improperly changed, destroyed, or forged.</td>
+            <td>A value is altered, a message is tampered with, or the source cannot be trusted.</td>
+            <td>A bank transfer amount is changed while data is moving between systems.</td>
+          </tr>
+          <tr>
+            <td><strong>Availability</strong></td>
+            <td>Authorized users should be able to access systems and information when needed.</td>
+            <td>A system is down, blocked, overloaded, or unusable.</td>
+            <td>A hospital system becomes unreachable during a ransomware incident.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>2.2 Why information security matters</h3>
+      <p>The deck emphasizes that modern economies and organizations are increasingly dependent on <strong>digital information processing</strong>. Many business records are stored only in computer systems, and many workflows cannot continue when those systems fail. That means information security is no longer a technical “nice to have”; it is a <strong>business continuity requirement</strong>.</p>
+
+      <div class="example">
+        <strong>Example:</strong> If a company keeps purchase orders, inventory counts, and customer invoices only in software, then a loss of availability does not just inconvenience the IT team. It can stop shipping, billing, customer support, and cash flow.
+      </div>
+
+      <h3>2.3 Vulnerabilities, threats, and controls</h3>
+      <p>The deck’s general security model separates three core ideas:</p>
+      <ul>
+        <li><strong>Vulnerability:</strong> a weakness that can be exploited.</li>
+        <li><strong>Threat:</strong> the attacker’s capability, intent, and method.</li>
+        <li><strong>Control:</strong> the safeguard that blocks, reduces, or detects the attack.</li>
+      </ul>
+
+      <h4>Diagram walkthrough: General information security model</h4>
+      <table>
+        <thead>
+          <tr><th>Figure Element</th><th>What it represents</th><th>How to interpret it</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Central IT system / information assets</td>
+            <td>The data and systems the organization cares about.</td>
+            <td>This is the “thing of value” being protected.</td>
+          </tr>
+          <tr>
+            <td>Vulnerability inside the system</td>
+            <td>A weakness such as insecure software, poor configuration, or weak access control.</td>
+            <td>A threat becomes dangerous only when a vulnerability makes exploitation possible.</td>
+          </tr>
+          <tr>
+            <td>Threat arrows pointing toward the system</td>
+            <td>Possible attacks coming from adversaries.</td>
+            <td>Threats can come from many directions and use different methods.</td>
+          </tr>
+          <tr>
+            <td>Security controls shown as a protective barrier</td>
+            <td>Preventive or mitigating safeguards.</td>
+            <td>Controls reduce the chance that a threat reaches the vulnerable asset successfully.</td>
+          </tr>
+          <tr>
+            <td>“Blocked threat” vs. “successful attack”</td>
+            <td>Two possible outcomes of the same attack attempt.</td>
+            <td>If controls are strong enough, the attack is stopped; if not, the threat exploits the vulnerability.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <strong>Important logic:</strong> A threat by itself does not automatically cause damage. Damage occurs when a <strong>threat</strong> successfully exploits a <strong>vulnerability</strong> and no adequate <strong>control</strong> prevents it.
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-title">Key Takeaway</div>
+        The foundational model is: <strong>protect information by preserving confidentiality, integrity, and availability, while reducing vulnerabilities, anticipating threats, and applying controls.</strong>
+      </div>
+    </section>
+
+    <section id="controls" class="card searchable">
+      <h2>3. Network Security Controls</h2>
+
+      <h3>3.1 What network security adds</h3>
+      <p>The deck defines <strong>network security</strong> as providing information security in the presence of risks created by computer networks. Networks matter because they expose systems to two directions of risk:</p>
+      <ul>
+        <li><strong>Incoming risk:</strong> attackers can send traffic into an organization to read, alter, or disable systems.</li>
+        <li><strong>Outgoing risk:</strong> data leaving the organization can be read, modified, or blocked in transit.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example:</strong> An external attacker probing an employee portal is an <strong>incoming</strong> threat. A customer’s payment data crossing the internet without protection is an <strong>outgoing</strong> risk.
+      </div>
+
+      <h3>3.2 Why network security matters</h3>
+      <p>The slides stress that critical infrastructure - such as power systems and payment systems - is network-connected. That means weak network security can create very expensive failures. In other words, the network is not just a convenience layer; it is an attack surface.</p>
+
+      <h3>3.3 Control matrix by security objective</h3>
+      <p>One of the most important summary slides classifies controls by whether they protect <strong>incoming</strong> or <strong>outgoing</strong> information and by which part of the CIA triad they support.</p>
+
+      <table>
+        <thead>
+          <tr><th>Security Goal</th><th>Incoming Information Controls</th><th>Why they help</th><th>Outgoing Information Controls</th><th>Why they help</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Confidentiality</strong></td>
+            <td>Patching, authentication, authorization</td>
+            <td>These reduce unauthorized entry and limit who can access data once inside.</td>
+            <td>Encryption</td>
+            <td>Encryption protects data from being read while it travels over untrusted networks.</td>
+          </tr>
+          <tr>
+            <td><strong>Integrity</strong></td>
+            <td>Firewalls</td>
+            <td>Firewalls regulate traffic so malicious or unauthorized packets are blocked.</td>
+            <td>Digital signatures</td>
+            <td>Digital signatures allow the receiver to detect tampering and verify origin.</td>
+          </tr>
+          <tr>
+            <td><strong>Availability</strong></td>
+            <td>Virus protection, end-user training</td>
+            <td>These reduce malware infections and risky user behavior that can disrupt services.</td>
+            <td>Redundancy</td>
+            <td>Backup paths and spare capacity keep services running despite failures.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>3.4 Patching</h3>
+      <p><strong>Patching</strong> means applying software updates that fix known vulnerabilities. Since software is complex, vulnerabilities are common, and known flaws often become public knowledge. Once a flaw is known, attackers frequently automate attempts to exploit systems that have not been updated.</p>
+      <div class="example">
+        <strong>Example:</strong> A web server with an unpatched remote-code-execution bug may be compromised within hours of the bug becoming widely known, especially if attackers are scanning the internet for that version.
+      </div>
+      <p>Small organizations may rely on <strong>automatic updates</strong>, but the key idea is speed: the longer a patch is delayed, the longer the vulnerability remains exploitable.</p>
+
+      <h3>3.5 Authentication and authorization</h3>
+      <p><strong>Authentication</strong> asks, “Who are you?” <strong>Authorization</strong> asks, “What are you allowed to do?” These are related but different.</p>
+      <ul>
+        <li><strong>Authentication</strong> verifies a claimed identity, commonly with a username and password.</li>
+        <li><strong>Authorization</strong> grants or denies permissions such as read, write, delete, or execute.</li>
+      </ul>
+      <p>The slide uses a physical analogy: employees are given keys only to the rooms they need. The computing equivalent is the principle of <strong>least privilege</strong>: users should only get the minimum access needed for their job.</p>
+
+      <div class="example">
+        <strong>Example:</strong> A marketing employee may authenticate successfully to the company system, but authorization rules should still prevent them from editing payroll data.
+      </div>
+
+      <h3>3.6 Good passwords</h3>
+      <p>The deck highlights several password rules:</p>
+      <ul>
+        <li>Use more than just letters.</li>
+        <li>Avoid obvious names and dictionary words.</li>
+        <li>Use passwords longer than 8 characters.</li>
+        <li>Change them regularly.</li>
+        <li>Do not reuse them, especially across sensitive accounts.</li>
+      </ul>
+      <p>The deeper lesson is that passwords fail not only because they are weak, but also because people reuse them. A breach on one site can become a breach on many sites if the same password is used everywhere.</p>
+
+      <div class="example">
+        <strong>Example:</strong> If a user reuses one password on a social site and a banking site, a single password leak can become a financial loss.
+      </div>
+
+      <h3>3.7 Firewalls</h3>
+      <p>A <strong>firewall</strong> is a system placed between networks to regulate traffic. It examines packets entering or leaving a network and applies administrator-defined rules to allow or block them. Common rule criteria include:</p>
+      <ul>
+        <li><strong>Source IP address</strong></li>
+        <li><strong>Destination IP address</strong></li>
+        <li><strong>Destination port</strong></li>
+      </ul>
+      <p>The slides describe a simple rule-building process:</p>
+      <ol>
+        <li>Block insecure services (such as telnet or FTP).</li>
+        <li>Block blacklisted networks.</li>
+        <li>Allow trusted services (such as SSH).</li>
+        <li>Allow safe public services (such as web, DNS, and email).</li>
+      </ol>
+
+      <h4>Diagram walkthrough: Common firewall / DMZ design</h4>
+      <table>
+        <thead>
+          <tr><th>Zone</th><th>What lives there</th><th>Why it is designed this way</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Internet</strong></td>
+            <td>External users and untrusted networks.</td>
+            <td>This is the open environment from which attacks may originate.</td>
+          </tr>
+          <tr>
+            <td><strong>Outer firewall</strong></td>
+            <td>Boundary between the internet and public-facing services.</td>
+            <td>It blocks clearly unsafe traffic before it reaches exposed servers.</td>
+          </tr>
+          <tr>
+            <td><strong>DMZ (de-militarized zone)</strong></td>
+            <td>Public-facing services such as web, DNS, and email.</td>
+            <td>These services must be reachable from outside, but they should be separated from the internal network.</td>
+          </tr>
+          <tr>
+            <td><strong>Inner firewall</strong></td>
+            <td>Boundary between the DMZ and the internal network.</td>
+            <td>If a public server is compromised, the attacker still faces another barrier before reaching internal systems.</td>
+          </tr>
+          <tr>
+            <td><strong>Internal network</strong></td>
+            <td>Private organizational systems and sensitive data.</td>
+            <td>This is the most protected zone and is blocked from direct outside access.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="example">
+        <strong>Example:</strong> A company website may be reachable by everyone on the internet, but its internal HR database should never be directly reachable from the public web.
+      </div>
+
+      <h3>3.8 Anti-virus and end-user training</h3>
+      <p>The deck treats security as both a <strong>technical</strong> and a <strong>human</strong> problem.</p>
+      <ul>
+        <li><strong>Anti-virus / anti-malware</strong> tools detect or block malicious programs such as viruses and worms.</li>
+        <li><strong>End-user training</strong> teaches people to avoid dangerous behavior, especially with suspicious email, macros, and phishing pages.</li>
+      </ul>
+      <p>The slide distinguishes <strong>worms</strong> (self-contained and self-spreading) from <strong>viruses</strong> (which use other programs to replicate). The practical lesson is that malware can spread quickly, so signatures and detection tools must be kept current.</p>
+
+      <div class="example">
+        <strong>Example:</strong> An employee who opens a malicious spreadsheet attachment can trigger malware even if the core network controls are strong. User behavior is part of the attack surface.
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-title">Key Takeaway</div>
+        Network security controls are easiest to remember when grouped by purpose: <strong>prevent entry, limit access, regulate traffic, protect data in transit, and reduce disruption.</strong>
+      </div>
+    </section>
+
+    <section id="encryption" class="card searchable">
+      <h2>4. Encryption, SSH, and Integrity Protection</h2>
+
+      <h3>4.1 What encryption is</h3>
+      <p><strong>Encryption</strong> converts readable <strong>plaintext</strong> into unreadable <strong>ciphertext</strong> so that only someone with the right key can recover the original information. The deck emphasizes two building blocks:</p>
+      <ul>
+        <li><strong>Algorithm</strong> - the procedure used to transform data.</li>
+        <li><strong>Key</strong> - the secret (or partially public) value that controls the algorithm’s behavior.</li>
+      </ul>
+
+      <h4>Diagram walkthrough: plaintext to ciphertext</h4>
+      <table>
+        <thead>
+          <tr><th>Stage</th><th>Sender view</th><th>What an eavesdropper sees</th><th>Receiver view</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Before encryption</td>
+            <td>Message is readable (“Hello”).</td>
+            <td>If intercepted now, the content is exposed.</td>
+            <td>Not received yet.</td>
+          </tr>
+          <tr>
+            <td>After encryption</td>
+            <td>Sender turns plaintext into ciphertext (“IFMMP” in the slide’s simple example).</td>
+            <td>The attacker sees scrambled data that should not reveal the original message directly.</td>
+            <td>Receiver later applies the correct reverse process.</td>
+          </tr>
+          <tr>
+            <td>After decryption</td>
+            <td>Done sending.</td>
+            <td>Still cannot interpret the protected transmission easily.</td>
+            <td>Receiver recovers the original plaintext.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>4.2 Symmetric key encryption</h3>
+      <p>In <strong>symmetric encryption</strong>, the same key is used to encrypt and decrypt. This makes symmetric systems fast and computationally efficient. The slide gives a toy example: shifting letters by one position.</p>
+      <p>The current real-world standard mentioned is <strong>AES (Advanced Encryption Standard)</strong>.</p>
+
+      <div class="callout">
+        <strong>Main advantage:</strong> Symmetric encryption is fast, so it is good for protecting large amounts of data.<br>
+        <strong>Main challenge:</strong> Both parties need the same secret key, so <strong>key exchange</strong> becomes a problem.
+      </div>
+
+      <div class="example">
+        <strong>Example:</strong> Once a secure session starts, the bulk of an HTTPS connection is typically protected with fast symmetric encryption because sending every byte with a slower public-key operation would be inefficient.
+      </div>
+
+      <h3>4.3 Asymmetric key encryption</h3>
+      <p><strong>Asymmetric encryption</strong> uses two related keys:</p>
+      <ul>
+        <li><strong>Public key</strong> - shared openly and used for encryption (or verification).</li>
+        <li><strong>Private key</strong> - kept secret and used for decryption (or signing).</li>
+      </ul>
+      <p>This solves the “unsafe key exchange” problem of symmetric encryption because the public key can be sent openly.</p>
+      <p>The deck notes that many asymmetric systems use modular arithmetic. In its simplified numeric example, ciphertext is produced with:</p>
+      <p><span class="code">ciphertext = plaintext * 3 mod 10</span></p>
+      <p>and decrypted with:</p>
+      <p><span class="code">plaintext = ciphertext * 7 mod 10</span></p>
+
+      <h4>Study table: simplified asymmetric-key mapping from the slide</h4>
+      <table>
+        <thead>
+          <tr><th>Plaintext digit</th><th>Encrypted digit (x * 3 mod 10)</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0 maps to 0 in this toy system.</td></tr>
+          <tr><td>1</td><td>3</td><td>1 becomes 3.</td></tr>
+          <tr><td>2</td><td>6</td><td>2 becomes 6.</td></tr>
+          <tr><td>3</td><td>9</td><td>3 becomes 9.</td></tr>
+          <tr><td>4</td><td>2</td><td>The modulo operation “wraps around.”</td></tr>
+          <tr><td>5</td><td>5</td><td>Some values can map to themselves in toy examples.</td></tr>
+          <tr><td>6</td><td>8</td><td>Pattern continues under modulo 10.</td></tr>
+          <tr><td>7</td><td>1</td><td>7 becomes 1.</td></tr>
+          <tr><td>8</td><td>4</td><td>8 becomes 4.</td></tr>
+          <tr><td>9</td><td>7</td><td>9 becomes 7.</td></tr>
+        </tbody>
+      </table>
+
+      <p>In real systems, the numbers are far larger, which is what makes recovering the private key from the public key computationally difficult. The deck names <strong>RSA</strong> as a popular example.</p>
+
+      <h3>4.4 Why both symmetric and asymmetric encryption are used together</h3>
+      <p>The deck explicitly states that practical systems usually combine the two approaches:</p>
+      <ul>
+        <li><strong>Asymmetric encryption</strong> is used first to exchange a temporary symmetric session key.</li>
+        <li><strong>Symmetric encryption</strong> is then used for the rest of the session because it is faster.</li>
+      </ul>
+      <p>This gives the best of both worlds: safer key establishment plus efficient bulk encryption.</p>
+
+      <div class="example">
+        <strong>Example:</strong> When you open a secure banking site, public-key techniques help set up the session safely, and then the session continues with faster symmetric encryption.</div>
+
+      <h3>4.5 TLS, VPN, and SSH</h3>
+      <p>The deck gives three important applied uses of encryption:</p>
+
+      <table>
+        <thead>
+          <tr><th>Technology</th><th>Main purpose</th><th>How to think about it</th><th>Typical example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>TLS</strong></td>
+            <td>Protect application traffic in transit.</td>
+            <td>Application-level secure channel, commonly seen as <span class="code">https</span>.</td>
+            <td>Secure browsing, online banking, secure email transport.</td>
+          </tr>
+          <tr>
+            <td><strong>VPN</strong></td>
+            <td>Create a protected path into an organization’s network.</td>
+            <td>Traffic is routed through a trusted gateway inside the organization.</td>
+            <td>Remote employee accessing internal files or systems from home.</td>
+          </tr>
+          <tr>
+            <td><strong>SSH</strong></td>
+            <td>Secure remote login and secure command/data transport.</td>
+            <td>An encrypted replacement for insecure remote terminal access such as telnet.</td>
+            <td>Administrator securely logging into a Linux server.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Diagram walkthrough: TLS vs VPN</h4>
+      <table>
+        <thead>
+          <tr><th>Pattern</th><th>What the figure shows</th><th>Interpretation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>TLS</td>
+            <td>A user’s browser connects securely to a specific site (the slide contrasts a generic university site with a logged-in bank site).</td>
+            <td>TLS protects a particular application session, not necessarily all device traffic.</td>
+          </tr>
+          <tr>
+            <td>VPN</td>
+            <td>A remote laptop routes traffic through a VPN gateway before reaching internal organizational resources.</td>
+            <td>VPN protects the path into the organization and extends access to internal resources that may not be publicly exposed.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>4.6 SSH authentication and transaction states</h3>
+      <p>The SSH slides emphasize two ideas:</p>
+      <ul>
+        <li><strong>Host authentication:</strong> clients need confidence they are talking to the correct server, not an impostor.</li>
+        <li><strong>Negotiation before secure communication:</strong> SSH first uses public-key methods to negotiate algorithms and shared secrets, then switches to symmetric encryption for the actual session.</li>
+      </ul>
+
+      <h4>Study table: SSH transaction states</h4>
+      <table>
+        <thead>
+          <tr><th>Stage</th><th>What happens</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1. TCP connection</td>
+            <td>The client first establishes a normal TCP connection.</td>
+            <td>SSH runs on top of TCP, so transport must exist before security negotiation begins.</td>
+          </tr>
+          <tr>
+            <td>2. Protocol identification</td>
+            <td>Client and server exchange protocol version and software details.</td>
+            <td>Both sides confirm they are speaking the same protocol.</td>
+          </tr>
+          <tr>
+            <td>3. Key exchange</td>
+            <td>Encryption algorithms and keys are negotiated using public-key techniques.</td>
+            <td>This creates a shared secret without sending that secret openly.</td>
+          </tr>
+          <tr>
+            <td>4. <span class="code">SSH_MSG_NEWKEYS</span></td>
+            <td>The protocol signals that both sides should begin using the newly negotiated keys.</td>
+            <td>This marks the transition from setup to protected communication.</td>
+          </tr>
+          <tr>
+            <td>5. Encrypted communication</td>
+            <td>Traffic now uses the negotiated shared-key encryption.</td>
+            <td>Commands, data, and credentials are protected on the network.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="example">
+        <strong>Example:</strong> When a developer uses SSH to log into a cloud server, the first connection may prompt them to trust the server’s host identity. On later connections, SSH checks that the server still matches that known identity.
+      </div>
+
+      <h3>4.7 Digital signatures and message integrity</h3>
+      <p>Encryption is mainly about <strong>confidentiality</strong>, but security also requires <strong>integrity</strong>. The deck introduces <strong>digital signatures</strong> for this purpose.</p>
+      <p>The simplified idea is:</p>
+      <ol>
+        <li>Compute a <strong>message digest</strong> (a fixed-size summary of the message).</li>
+        <li>Encrypt the digest with the sender’s <strong>private key</strong>.</li>
+        <li>The receiver uses the sender’s <strong>public key</strong> to verify the digest.</li>
+        <li>The receiver also computes a fresh local digest of the received message and compares the two.</li>
+      </ol>
+      <p>If the digests do not match, the message was changed or corrupted.</p>
+
+      <h4>Diagram walkthrough: confidentiality + integrity using asymmetric keys</h4>
+      <table>
+        <thead>
+          <tr><th>Security goal</th><th>Sender action</th><th>Receiver action</th><th>Why it works</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Confidentiality</strong></td>
+            <td>Encrypt the message with Bob’s <strong>public key</strong>.</td>
+            <td>Bob decrypts with Bob’s <strong>private key</strong>.</td>
+            <td>Only Bob should possess the private key needed to read the message.</td>
+          </tr>
+          <tr>
+            <td><strong>Integrity / authenticity</strong></td>
+            <td>Compute a digest and encrypt that digest with Alice’s <strong>private key</strong>.</td>
+            <td>Use Alice’s <strong>public key</strong> to verify the digest and compare it with a locally computed digest.</td>
+            <td>If verification fails or the digests differ, the message was altered or did not come from the expected sender.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="example">
+        <strong>Example:</strong> Signed software updates use this same logic. Your device checks the publisher’s signature before trusting the update, which helps prevent tampered or fake installers.
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-title">Key Takeaway</div>
+        Remember the clean separation: <strong>encryption protects confidentiality, digital signatures protect integrity and authenticity, and real systems usually combine symmetric and asymmetric methods.</strong>
+      </div>
+    </section>
+
+    <section id="availability" class="card searchable">
+      <h2>5. Availability and Redundancy</h2>
+
+      <h3>5.1 What redundancy means</h3>
+      <p><strong>Redundancy</strong> means keeping extra capacity, alternate paths, or duplicate components so that service continues even when something fails. In the slide deck, redundancy is explicitly tied to <strong>availability</strong>.</p>
+
+      <p>This is especially common for network-facing services such as:</p>
+      <ul>
+        <li><strong>DNS</strong> (name resolution)</li>
+        <li><strong>Web services</strong></li>
+        <li><strong>Email services</strong></li>
+      </ul>
+
+      <h3>5.2 How to read the redundancy figure</h3>
+      <p>The figure shown on the slide is a network graph with one highly connected central node and many linked surrounding nodes. Even though the diagram is not explained numerically, the intended lesson is conceptual:</p>
+
+      <table>
+        <thead>
+          <tr><th>Observed feature in the figure</th><th>What it implies</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A central node connected to many others</td>
+            <td>Some network points can serve as major hubs or aggregation points.</td>
+          </tr>
+          <tr>
+            <td>Many outward links</td>
+            <td>Traffic or service can be distributed across multiple paths or peers.</td>
+          </tr>
+          <tr>
+            <td>Clusters branching away from the center</td>
+            <td>Large systems are often built from multiple interlinked components rather than one single machine.</td>
+          </tr>
+          <tr>
+            <td>Multiple surrounding nodes rather than one endpoint</td>
+            <td>Redundancy often means “more than one place to go” if a component fails.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="example">
+        <strong>Example:</strong> If a company hosts its website on two servers behind a load balancer, one server can fail and users may still reach the site through the other server.
+      </div>
+
+      <div class="callout">
+        <strong>Exam tip:</strong> Redundancy is not mainly about secrecy or correctness. Its primary purpose is <strong>keeping systems available despite failure, overload, or maintenance.</strong>
+      </div>
+
+      <div class="takeaway">
+        <div class="takeaway-title">Key Takeaway</div>
+        For availability, the big idea is simple: <strong>do not depend on a single component when downtime is costly.</strong>
+      </div>
+    </section>
+
+    <section id="computer-basics" class="card searchable">
+      <h2>6. Modern Computing Foundations</h2>
+
+      <h3>6.1 The five classic components of a computer</h3>
+      <p>The second half of the deck begins with the <strong>Von Neumann model</strong>, which describes a computer as a system built from five broad parts:</p>
+      <ul>
+        <li><strong>Input</strong></li>
+        <li><strong>Output</strong></li>
+        <li><strong>Memory</strong></li>
+        <li><strong>Central control part</strong></li>
+        <li><strong>Central arithmetic part</strong></li>
+      </ul>
+
+      <h4>Diagram walkthrough: Von Neumann architecture</h4>
+      <table>
+        <thead>
+          <tr><th>Component</th><th>Role in the figure</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Input device</strong></td>
+            <td>Feeds data or instructions into the system.</td>
+            <td>The computer needs a way to receive commands and data from users or other systems.</td>
+          </tr>
+          <tr>
+            <td><strong>Output device</strong></td>
+            <td>Presents results produced by the system.</td>
+            <td>Computation is only useful if the result can be communicated back out.</td>
+          </tr>
+          <tr>
+            <td><strong>Control unit</strong></td>
+            <td>Directs which instruction is executed and in what order.</td>
+            <td>This is the coordination center of computation.</td>
+          </tr>
+          <tr>
+            <td><strong>Arithmetic / Logic Unit (ALU)</strong></td>
+            <td>Performs calculations and logical comparisons.</td>
+            <td>This is where core computational work happens.</td>
+          </tr>
+          <tr>
+            <td><strong>Memory unit</strong></td>
+            <td>Stores data and instructions used by the CPU.</td>
+            <td>Programs and intermediate values must be stored somewhere accessible.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>The most important conceptual point is that modern programming languages still map back to this architecture. Variables, assignments, loops, and function calls may look high-level, but at a lower level they still become operations on memory, control flow, and arithmetic/logic.</p>
+
+      <div class="example">
+        <strong>Example:</strong> A simple statement like <span class="code">total = price * quantity</span> becomes a sequence of low-level steps: load values from memory, perform multiplication in the ALU, and store the result back in memory.
+      </div>
+
+      <h3>6.2 Operating systems</h3>
+      <p>An <strong>operating system (OS)</strong> performs common services needed by applications. Instead of every application directly controlling disks, memory, displays, and devices, the OS provides standardized functionality.</p>
+      <p>The slides specifically mention that operating systems implement <strong>system calls</strong>, which are the functions through which applications request OS services.</p>
+
+      <h4>Common services the OS handles</h4>
+      <ul>
+        <li>Reading and writing data from storage</li>
+        <li>Printing or sending output to devices</li>
+        <li>Managing computer usage and auditing</li>
+        <li>Allocating memory and processor time</li>
+        <li>Coordinating access to hardware devices</li>
+      </ul>
+
+      <h4>Diagram walkthrough: OS as the middle layer</h4>
+      <table>
+        <thead>
+          <tr><th>Layer in the figure</th><th>Meaning</th><th>Study interpretation</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Users</td>
+            <td>People interacting with applications.</td>
+            <td>Users do not directly control the hardware.</td>
+          </tr>
+          <tr>
+            <td>End-user application programs</td>
+            <td>Apps that users run for real tasks.</td>
+            <td>Applications depend on the OS for shared services.</td>
+          </tr>
+          <tr>
+            <td>Operating system</td>
+            <td>Manages resources and provides services to applications.</td>
+            <td>The OS is the control layer that mediates between software and hardware.</td>
+          </tr>
+          <tr>
+            <td>Hardware + controllers + memory</td>
+            <td>CPU, storage, USB, display, and the physical resource layer.</td>
+            <td>The OS coordinates access so multiple applications can use shared resources safely.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="example">
+        <strong>Example:</strong> When a document editor saves a file, it does not usually “speak disk hardware” directly. It calls the OS, and the OS handles the actual file-system and device operations.
+      </div>
+
+      <h3>6.3 Big data and the 5V model</h3>
+      <p>The deck uses the <strong>5V model</strong> to explain why infrastructure had to evolve:</p>
+
+      <table>
+        <thead>
+          <tr><th>V</th><th>Meaning</th><th>Simple example</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Volume</strong></td><td>Large amount of data</td><td>Billions of log records or transactions</td></tr>
+          <tr><td><strong>Velocity</strong></td><td>High speed of data generation or arrival</td><td>Real-time sensor streams or clickstreams</td></tr>
+          <tr><td><strong>Variety</strong></td><td>Different data formats and structures</td><td>Tables, images, emails, JSON events</td></tr>
+          <tr><td><strong>Veracity</strong></td><td>Data quality and trustworthiness issues</td><td>Missing, noisy, or inconsistent records</td></tr>
+          <tr><td><strong>Value</strong></td><td>The usefulness gained from the data</td><td>Using analytics to improve decisions or revenue</td></tr>
+        </tbody>
+      </table>
+
+      <p>The slide then links this growth in data demands to the need for <strong>virtual machines</strong> and <strong>warehouse-scale computers</strong>, which are both ways to make computing more scalable and efficient.</p>
+
+      <div class="takeaway">
+        <div class="takeaway-title">Key Takeaway</div>
+        The computing foundations section teaches the stack beneath applications: <strong>hardware -> operating system -> applications -> users</strong>, and it explains why data growth pressures this stack to scale.
+      </div>
+    </section>
+
+    <section id="virtualization" class="card searchable">
+      <h2>7. Scaling, Virtualization, Containers, and Cloud</h2>
+
+      <h3>7.1 Virtual machines</h3>
+      <p>A <strong>virtual machine (VM)</strong> lets a <strong>guest operating system</strong> use computing resources provided by a <strong>host operating system</strong> and a <strong>virtualization layer</strong>. The key idea is isolation plus better utilization of hardware.</p>
+
+      <h4>Diagram walkthrough: VM stack</h4>
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>What the slide shows</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Host computer hardware</td>
+            <td>The physical CPU, memory, keyboard, disk, and devices.</td>
+            <td>This is the real machine underneath everything.</td>
+          </tr>
+          <tr>
+            <td>Host operating system</td>
+            <td>The main OS installed on the physical machine.</td>
+            <td>It manages the real hardware and supports virtualization.</td>
+          </tr>
+          <tr>
+            <td>Virtualization layer</td>
+            <td>The layer that creates virtual CPUs, virtual memory, and virtual disks.</td>
+            <td>It makes one physical machine appear as multiple isolated machines.</td>
+          </tr>
+          <tr>
+            <td>Guest operating systems</td>
+            <td>Separate OS instances, each with its own applications and virtual resources.</td>
+            <td>Different workloads can be isolated while sharing the same physical hardware.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="example">
+        <strong>Example:</strong> A company may run a Windows server VM for one legacy application and a Linux VM for another service on the same physical host.
+      </div>
+
+      <h3>7.2 Warehouse-scale computers</h3>
+      <p>The deck uses the term <strong>warehouse-scale computers</strong> to describe very large computing environments built from many servers working together. The focus shifts from optimizing one machine to optimizing an entire fleet.</p>
+
+      <p>The slide highlights five design goals:</p>
+      <ul>
+        <li><strong>Performance per dollar of capital invested</strong></li>
+        <li><strong>Performance per joule of energy consumed</strong></li>
+        <li><strong>Reliability</strong></li>
+        <li><strong>Request-level parallelism</strong></li>
+        <li><strong>Handling device failures</strong></li>
+      </ul>
+
+      <h4>Diagram walkthrough: single server -> rack -> cluster</h4>
+      <table>
+        <thead>
+          <tr><th>Level shown</th><th>What it represents</th><th>Main lesson</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>One server</td>
+            <td>A single machine with its own local memory and disk.</td>
+            <td>Fast local access, but limited scale.</td>
+          </tr>
+          <tr>
+            <td>Local rack</td>
+            <td>Many servers connected through a rack switch.</td>
+            <td>More capacity through parallel resources, with some network overhead.</td>
+          </tr>
+          <tr>
+            <td>Cluster / datacenter</td>
+            <td>Multiple racks connected through higher-level switching.</td>
+            <td>Massive capacity, but distributed design must account for latency and failure.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="example">
+        <strong>Example:</strong> A search engine serving millions of queries cannot rely on one machine. It distributes requests across many servers and tolerates failures as a normal operating condition.
+      </div>
+
+      <h3>7.3 Containers</h3>
+      <p>The deck contrasts <strong>containers</strong> with virtual machines:</p>
+      <ul>
+        <li><strong>VMs</strong> provide <strong>hardware virtualization</strong>.</li>
+        <li><strong>Containers</strong> provide <strong>OS-level virtualization</strong>.</li>
+      </ul>
+      <p>The practical consequence is that containers are usually lighter-weight when the goal is to isolate applications rather than run full guest operating systems. A container packages an application and its dependencies without bundling an entire extra operating system.</p>
+
+      <h4>Why containers help</h4>
+      <ul>
+        <li>They reduce the “it works on my machine” problem.</li>
+        <li>They package runtime dependencies together.</li>
+        <li>They make deployment more consistent across environments.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example:</strong> If an app needs a specific Python version and a specific library version, a container can package those together so the deployment server behaves like the developer’s machine.
+      </div>
+
+      <div class="callout">
+        The slide’s Docker analogy - “like a zip file for applications” - is not literally precise, but it is a good study shortcut: <strong>a container packages application code plus the environment it expects.</strong>
+      </div>
+
+      <h3>7.4 Cloud computing: core characteristics</h3>
+      <p>The deck lists five defining characteristics of cloud computing:</p>
+      <table>
+        <thead>
+          <tr><th>Characteristic</th><th>What it means in practice</th><th>Simple example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>On-demand self-service</strong></td>
+            <td>Users can provision resources when needed without waiting for manual setup.</td>
+            <td>A developer launches a server from a web console.</td>
+          </tr>
+          <tr>
+            <td><strong>Broad network access</strong></td>
+            <td>Services are reachable over the network using standard mechanisms.</td>
+            <td>Accessing storage or compute through the internet.</td>
+          </tr>
+          <tr>
+            <td><strong>Resource pooling</strong></td>
+            <td>Provider resources are shared among multiple users.</td>
+            <td>Many customers using one provider’s large datacenter pool.</td>
+          </tr>
+          <tr>
+            <td><strong>Rapid elasticity</strong></td>
+            <td>Resources can scale up or down quickly.</td>
+            <td>Adding more servers during a traffic spike.</td>
+          </tr>
+          <tr>
+            <td><strong>Measured service</strong></td>
+            <td>Usage is metered and tracked.</td>
+            <td>Billing by CPU time, storage, or bandwidth used.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>7.5 Cloud deployment and service models</h3>
+      <p>The deck divides cloud models in two ways:</p>
+
+      <table>
+        <thead>
+          <tr><th>Model Type</th><th>Options from the slide</th><th>What they mean</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Access / deployment models</strong></td>
+            <td>Private, Community, Public, Hybrid</td>
+            <td>These describe who owns the infrastructure and who shares it.</td>
+          </tr>
+          <tr>
+            <td><strong>Service models</strong></td>
+            <td>IaaS, PaaS, SaaS</td>
+            <td>These describe how much of the stack the provider manages for you.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Quick distinctions</h4>
+      <ul>
+        <li><strong>IaaS (Infrastructure as a Service):</strong> rent computing infrastructure such as virtual machines, storage, and networking.</li>
+        <li><strong>PaaS (Platform as a Service):</strong> use a managed platform where the provider handles more of the runtime and deployment environment.</li>
+        <li><strong>SaaS (Software as a Service):</strong> consume finished software over the network.</li>
+      </ul>
+
+      <div class="example">
+        <strong>Example:</strong> Renting a VM is closer to <strong>IaaS</strong>; deploying code onto a managed app platform is closer to <strong>PaaS</strong>; using a browser-based office suite is closer to <strong>SaaS</strong>.
+      </div>
+
+      <h3>7.6 Cloud implementation and APIs</h3>
+      <p>The final cloud slide says cloud systems <strong>hide underlying hardware details</strong> and expose services through <strong>APIs</strong>. This means developers interact with abstractions like compute, networking, and storage, rather than directly wiring physical machines.</p>
+
+      <h4>Diagram walkthrough: abstraction in cloud platforms</h4>
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>What the figure communicates</th><th>Study meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Users / internet-facing applications</td>
+            <td>Applications sit above the cloud platform and call into it.</td>
+            <td>Developers consume services instead of managing raw hardware directly.</td>
+          </tr>
+          <tr>
+            <td>APIs</td>
+            <td>Programmatic interface between applications and the platform.</td>
+            <td>Cloud resources are requested and controlled through software calls.</td>
+          </tr>
+          <tr>
+            <td>Cloud platform services</td>
+            <td>Compute, networking, and storage are presented as managed services.</td>
+            <td>The platform abstracts and organizes the underlying infrastructure.</td>
+          </tr>
+          <tr>
+            <td>Underlying standard hardware</td>
+            <td>Physical servers still exist beneath the platform.</td>
+            <td>The cloud does not remove hardware; it hides and pools it.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>The slide names <strong>OpenStack</strong> as an industry standardization effort, reinforcing the idea that cloud environments are built around consistent interfaces and resource abstractions.</p>
+
+      <div class="takeaway">
+        <div class="takeaway-title">Key Takeaway</div>
+        To scale modern systems, organizations move from <strong>single machines</strong> to <strong>virtualized resources, containerized applications, and cloud-managed infrastructure</strong> that can be provisioned, isolated, and expanded more efficiently.
+      </div>
+    </section>
+
+    <section id="exam" class="card searchable">
+      <h2>8. Exam-Focused Wrap-Up</h2>
+
+      <h3>8.1 High-yield comparisons to memorize</h3>
+      <table>
+        <thead>
+          <tr><th>Comparison</th><th>What to remember</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Information security vs. network security</td><td>Network security is a subset of information security focused on network-created risks.</td></tr>
+          <tr><td>Confidentiality vs. integrity vs. availability</td><td>Secrecy vs. correctness/authenticity vs. reliable access.</td></tr>
+          <tr><td>Vulnerability vs. threat vs. control</td><td>Weakness vs. possible attacker/action vs. safeguard.</td></tr>
+          <tr><td>Authentication vs. authorization</td><td>Identity check vs. permission check.</td></tr>
+          <tr><td>Virus vs. worm</td><td>Virus depends on other programs; worm is self-contained and self-spreading.</td></tr>
+          <tr><td>Symmetric vs. asymmetric encryption</td><td>Same key both ways and fast vs. public/private key pair and safer key exchange.</td></tr>
+          <tr><td>Encryption vs. digital signature</td><td>Confidentiality vs. integrity/authenticity.</td></tr>
+          <tr><td>TLS vs. VPN vs. SSH</td><td>Protect app sessions vs. protect network path into an organization vs. secure remote login/transport.</td></tr>
+          <tr><td>VMs vs. containers</td><td>Hardware virtualization with guest OS vs. OS-level virtualization for application isolation.</td></tr>
+          <tr><td>IaaS vs. PaaS vs. SaaS</td><td>Rent infrastructure vs. rent platform vs. consume finished software.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>8.2 Fast answer templates</h3>
+      <ul>
+        <li><strong>If asked how security failure happens:</strong> “A threat exploits a vulnerability because controls are missing, weak, or misconfigured.”</li>
+        <li><strong>If asked why encryption is mixed in practice:</strong> “Asymmetric encryption solves secure key exchange; symmetric encryption handles bulk data efficiently.”</li>
+        <li><strong>If asked why organizations use redundancy:</strong> “To preserve availability when components fail or traffic spikes.”</li>
+        <li><strong>If asked why cloud matters:</strong> “It abstracts hardware, exposes resources via APIs, and supports elastic, pooled, measured access to compute resources.”</li>
+      </ul>
+
+      <h3>8.3 Final summary of the full deck</h3>
+      <p>This deck teaches that secure digital systems require both <strong>security logic</strong> and <strong>infrastructure logic</strong>. First, you define the security goals (CIA), identify vulnerabilities and threats, and apply controls such as patching, firewalls, encryption, signatures, training, and redundancy. Then, you understand the computing platforms those controls live on: the OS, virtual machines, containers, warehouse-scale systems, and cloud platforms.</p>
+
+      <div class="takeaway">
+        <div class="takeaway-title">Key Takeaway</div>
+        The most exam-ready one-line summary is: <strong>Protect information with the right controls, then run those controls on infrastructure that can scale, isolate, and stay available.</strong>
+      </div>
+
+      <div class="footer-note">
+        Prepared as a structured study guide from the uploaded slide deck. This document intentionally expands brief slide bullets into explanation-first notes so it can be studied independently.
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const searchBox = document.getElementById('searchBox');
+const sections = Array.from(document.querySelectorAll('.searchable'));
+searchBox.addEventListener('input', function () {
+  const q = this.value.trim().toLowerCase();
+  sections.forEach(section => {
+    const text = section.innerText.toLowerCase();
+    section.classList.toggle('hidden-by-search', q && !text.includes(q));
+  });
+});
+</script>
+</body>
+</html>

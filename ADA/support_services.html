@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support Services and Routing - Comprehensive Study Notes</title>
+<style>
+  :root{
+    --bg:#0f172a;
+    --panel:#111827;
+    --card:#ffffff;
+    --ink:#111827;
+    --muted:#475569;
+    --line:#e5e7eb;
+    --accent:#2563eb;
+    --accent-soft:#dbeafe;
+    --good:#ecfeff;
+    --warn:#fff7ed;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background:#f8fafc;
+    color:var(--ink);
+    line-height:1.6;
+  }
+  .layout{
+    display:grid;
+    grid-template-columns: 320px minmax(0,1fr);
+    min-height:100vh;
+  }
+  aside{
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow:auto;
+    background:linear-gradient(180deg,#0f172a,#111827);
+    color:#fff;
+    padding:22px 18px;
+    border-right:1px solid rgba(255,255,255,.08);
+  }
+  aside h1{
+    font-size:1.15rem;
+    line-height:1.35;
+    margin:0 0 8px 0;
+  }
+  aside .meta{
+    font-size:.92rem;
+    color:#cbd5e1;
+    margin-bottom:14px;
+  }
+  aside input{
+    width:100%;
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    outline:none;
+    margin:10px 0 16px;
+  }
+  aside input::placeholder{color:#cbd5e1}
+  nav a{
+    display:block;
+    color:#dbeafe;
+    text-decoration:none;
+    padding:8px 10px;
+    border-radius:8px;
+    margin:3px 0;
+    font-size:.95rem;
+  }
+  nav a:hover{background:rgba(255,255,255,.08)}
+  .small{
+    margin-top:18px;
+    font-size:.84rem;
+    color:#cbd5e1;
+  }
+  main{
+    padding:28px;
+    max-width:1100px;
+  }
+  .hero{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:24px;
+    box-shadow:0 8px 24px rgba(15,23,42,.05);
+    margin-bottom:22px;
+  }
+  .hero h2{
+    margin:0 0 8px 0;
+    font-size:1.8rem;
+    line-height:1.25;
+  }
+  .hero p{margin:.45rem 0}
+  .note, .takeaway{
+    border-radius:14px;
+    padding:14px 16px;
+    margin:14px 0;
+    border:1px solid var(--line);
+  }
+  .note{
+    background:var(--warn);
+  }
+  .takeaway{
+    background:var(--accent-soft);
+    border-color:#bfdbfe;
+  }
+  section{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:24px;
+    margin:20px 0;
+    box-shadow:0 8px 24px rgba(15,23,42,.04);
+  }
+  section h2{
+    margin:0 0 12px;
+    font-size:1.5rem;
+    line-height:1.3;
+  }
+  section h3{
+    margin:22px 0 8px;
+    font-size:1.12rem;
+    line-height:1.35;
+  }
+  section h4{
+    margin:18px 0 6px;
+    font-size:1rem;
+  }
+  p, li{font-size:1rem}
+  ul{padding-left:1.25rem}
+  .grid2{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+  }
+  .chip{
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:999px;
+    background:#eef2ff;
+    color:#3730a3;
+    font-size:.8rem;
+    font-weight:700;
+    margin-right:6px;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12px 0 18px;
+    font-size:.96rem;
+  }
+  th, td{
+    border:1px solid var(--line);
+    padding:10px 10px;
+    vertical-align:top;
+    text-align:left;
+  }
+  th{
+    background:#f8fafc;
+    font-weight:700;
+  }
+  code, pre{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  pre{
+    background:#0b1220;
+    color:#e5e7eb;
+    padding:14px;
+    border-radius:12px;
+    overflow:auto;
+    font-size:.9rem;
+    line-height:1.45;
+  }
+  .callout{
+    border-left:4px solid var(--accent);
+    padding:10px 14px;
+    background:#f8fbff;
+    margin:12px 0;
+  }
+  .muted{color:var(--muted)}
+  .section-hidden{display:none}
+  @media (max-width: 980px){
+    .layout{grid-template-columns:1fr}
+    aside{position:relative;height:auto}
+    main{padding:18px}
+    .grid2{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <h1>Support Services and Routing</h1>
+    <div class="meta">ISM 6225 - Application Development for Analytics<br>Expanded study notes from the uploaded lecture deck</div>
+    <input id="searchBox" type="search" placeholder="Filter sections or keywords">
+    <nav>
+      <a href="#overview">1. Overview</a>
+      <a href="#dhcp">2. DHCP</a>
+      <a href="#private-addressing">3. RFC 1918 Private Addressing</a>
+      <a href="#nat-napt">4. NAT and NAPT</a>
+      <a href="#dns">5. DNS</a>
+      <a href="#home-networking">6. Home Networking</a>
+      <a href="#routing-basics">7. Routing Basics</a>
+      <a href="#autonomous-systems">8. Autonomous Systems</a>
+      <a href="#routing-tables">9. Routing Tables and Metrics</a>
+      <a href="#routing-protocols">10. Routing Protocols</a>
+      <a href="#study-checklist">11. Study Checklist</a>
+    </nav>
+    <div class="small">
+      This guide expands the concepts covered in the slide deck. Topics such as <b>network security</b>, <b>controls</b>, and <b>cryptography</b> appear in the agenda slide, but explanatory content for those topics is not present in the uploaded file.
+    </div>
+  </aside>
+
+  <main>
+    <div class="hero">
+      <h2>Comprehensive Study Notes: Support Services and Routing</h2>
+      <p><b>What this deck actually teaches:</b> The uploaded slides primarily cover <b>DHCP</b>, <b>RFC 1918 private (non-routable) addresses</b>, <b>NAT/NAPT</b>, <b>DNS</b>, <b>home networking</b>, and <b>routing</b>.</p>
+      <p><b>Why these topics matter:</b> Together, these services make modern IP networking practical. They let devices get addresses automatically, share limited public IP space, find systems by name instead of raw numbers, and move packets across many interconnected networks.</p>
+      <div class="note">
+        <b>Coverage note:</b> The title slide says “Support services and Security,” and the agenda lists security and cryptography. However, the uploaded lecture content meaningfully explains only support services and routing. This study guide stays faithful to the actual content provided.
+      </div>
+    </div>
+
+    <section id="overview" data-search="overview agenda support services routing dhcp dns nat napt">
+      <h2>1. Overview</h2>
+      <p><b>Support services</b> are the practical mechanisms that make IP networks usable in the real world. IP itself provides packet delivery, but users and administrators still need answers to key operational questions:</p>
+      <ul>
+        <li>How does a device get an IP address without manual setup?</li>
+        <li>How can thousands of devices share a smaller number of public addresses?</li>
+        <li>How can people use names like <b>www.usf.edu</b> instead of memorizing numbers?</li>
+        <li>How do packets travel across multiple networks, not just inside one LAN?</li>
+      </ul>
+      <p>This lecture answers those questions through four major ideas:</p>
+      <div class="grid2">
+        <div class="callout"><span class="chip">DHCP</span> Automatically assigns IP and other network settings.</div>
+        <div class="callout"><span class="chip">RFC 1918</span> Defines reusable private address blocks for internal networks.</div>
+        <div class="callout"><span class="chip">NAT/NAPT</span> Lets many internal devices share limited public addresses.</div>
+        <div class="callout"><span class="chip">DNS + Routing</span> Maps names to IPs and moves packets between networks.</div>
+      </div>
+      <div class="takeaway">
+        <b>Key Takeaway:</b> This deck is about the “operational glue” of networking: automatic addressing, address reuse, name resolution, and packet forwarding across networks.
+      </div>
+    </section>
+
+    <section id="dhcp" data-search="dhcp dynamic host configuration protocol dora lease server client subnet gateway dns">
+      <h2>2. DHCP (Dynamic Host Configuration Protocol)</h2>
+      <p><b>DHCP</b> solves a basic but critical problem: devices need valid network settings before they can communicate, but manual setup is slow, error-prone, and difficult to scale. In any organization, manual IP assignment creates predictable issues such as duplicate addresses, forgotten assignments, and dependence on a single administrator’s records.</p>
+
+      <h3>What DHCP does</h3>
+      <p>DHCP allows a server to <b>programmatically assign</b> IP addresses and related configuration to client devices. The client can boot for the first time, request settings automatically, and be ready to communicate without hand configuration.</p>
+
+      <h3>Three allocation models in the slides</h3>
+      <table>
+        <thead>
+          <tr><th>Allocation type</th><th>How it works</th><th>Best use case</th><th>Real-world example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Automatic</b></td>
+            <td>The DHCP server permanently assigns an address to a device.</td>
+            <td>Stable small networks where devices rarely change.</td>
+            <td>A home router always giving the same laptop the same address.</td>
+          </tr>
+          <tr>
+            <td><b>Manual</b></td>
+            <td>An administrator pre-defines a specific address, often tied to a MAC address, and DHCP reissues it.</td>
+            <td>Infrastructure devices that should stay predictable.</td>
+            <td>A network printer always receiving the same IP so users can keep printing.</td>
+          </tr>
+          <tr>
+            <td><b>Dynamic</b></td>
+            <td>The address is <b>leased</b> for a limited time and can be reused later.</td>
+            <td>Large user populations with devices coming and going.</td>
+            <td>Campus Wi-Fi or an ISP assigning temporary addresses to customers.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Why dynamic leasing matters</h3>
+      <p>Dynamic allocation is efficient because many devices are not always connected. A laptop that disconnects from Wi-Fi does not need to “own” its address forever. By leasing the address temporarily, the DHCP server can return it to the pool and assign it to another device later.</p>
+
+      <h3>What settings DHCP usually provides</h3>
+      <p>The slides emphasize that DHCP does more than assign an IP. It also commonly provides:</p>
+      <ul>
+        <li><b>Subnet mask</b> - tells the device what part of the address identifies the local network.</li>
+        <li><b>Default gateway</b> - tells the device where to send traffic for outside networks.</li>
+        <li><b>DNS server</b> - tells the device where to resolve domain names.</li>
+        <li><b>Domain name</b> - may identify the local administrative domain.</li>
+      </ul>
+
+      <h3>Visual walkthrough: DHCP operation timeline</h3>
+      <p>The “DHCP operation timeline” slide is best understood as the classic <b>DORA</b> exchange:</p>
+      <table>
+        <thead>
+          <tr><th>Step</th><th>Message</th><th>Purpose</th><th>What it means in plain language</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><b>Discover</b></td>
+            <td>Client broadcasts that it needs configuration.</td>
+            <td>“I just joined the network. Is any DHCP server available?”</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><b>Offer</b></td>
+            <td>Server offers an address and options.</td>
+            <td>“Yes. I can give you this IP address and these settings.”</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><b>Request</b></td>
+            <td>Client asks to use the offered configuration.</td>
+            <td>“I accept that address. Please reserve it for me.”</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><b>Acknowledge</b></td>
+            <td>Server confirms the lease.</td>
+            <td>“Approved. You may now use that address for the lease period.”</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Reading the sample <code>dhcpd.conf</code></h3>
+      <p>The deck includes a DHCP configuration example. Here is what each part means:</p>
+      <table>
+        <thead>
+          <tr><th>Config item</th><th>Meaning</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>option domain-name</code></td><td>Defines the local domain name.</td><td>Helps clients identify the organization’s naming context.</td></tr>
+          <tr><td><code>option domain-name-servers</code></td><td>Lists DNS servers for clients.</td><td>Without this, name resolution may fail.</td></tr>
+          <tr><td><code>option routers</code></td><td>Specifies the default gateway.</td><td>Enables traffic to reach external networks.</td></tr>
+          <tr><td><code>option subnet-mask</code></td><td>Defines local network boundaries.</td><td>Lets the host distinguish local vs remote traffic.</td></tr>
+          <tr><td><code>default-lease-time</code></td><td>Sets the lease duration.</td><td>Controls how long a client keeps an address before renewal.</td></tr>
+          <tr><td><code>range</code></td><td>Defines the dynamic address pool.</td><td>These addresses can be handed out automatically.</td></tr>
+          <tr><td><code>host ... fixed-address</code></td><td>Creates a manual reservation for a known device.</td><td>Useful for printers, servers, and other support devices.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout"><b>Real-world example:</b> In a coffee shop, every customer’s phone and laptop needs an address only while connected. DHCP gives temporary leases, reclaims them when users leave, and lets the small network keep functioning even with constant turnover.</div>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> DHCP replaces fragile manual IP management with automated, scalable address assignment and configuration. Its most important idea is the <b>lease</b>: a device can use an address for a period of time without owning it forever.
+      </div>
+    </section>
+
+    <section id="private-addressing" data-search="rfc 1918 private non-routable addresses reusable private address blocks 10 172 192.168">
+      <h2>3. RFC 1918 Private (Non-Routable) Addressing</h2>
+      <p>The slides present <b>RFC 1918</b> addressing as a second major response to IPv4 address shortage. The idea is simple: not every device needs a globally unique address that is visible across the public Internet.</p>
+
+      <h3>What “non-routable” means here</h3>
+      <p>These addresses are meant for <b>internal use</b>. Organizations can reuse them as often as needed because Internet routers do not advertise routes to these ranges between organizations. This means the same private address can exist in millions of homes or businesses at the same time.</p>
+
+      <h3>The three RFC 1918 blocks</h3>
+      <table>
+        <thead>
+          <tr><th>Block</th><th>Prefix notation</th><th>Typical use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>10.0.0.0 - 10.255.255.255</code></td><td><code>10/8</code></td><td>Very large private networks, enterprises, data centers</td></tr>
+          <tr><td><code>172.16.0.0 - 172.31.255.255</code></td><td><code>172.16/12</code></td><td>Medium to large private networks</td></tr>
+          <tr><td><code>192.168.0.0 - 192.168.255.255</code></td><td><code>192.168/16</code></td><td>Home routers and small office networks</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Why address reuse helps</h3>
+      <p>If every phone, printer, TV, thermostat, and laptop needed its own public IPv4 address, IPv4 exhaustion would become unmanageable even faster. Private addressing reduces that pressure by keeping most devices inside an internal address space and exposing only a much smaller number of public addresses at the network edge.</p>
+
+      <h3>Visual walkthrough: using non-routable addresses</h3>
+      <table>
+        <thead>
+          <tr><th>Where the packet is</th><th>Address type in use</th><th>Key idea</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Inside the home or company network</td><td><b>Private</b> address</td><td>Devices communicate using reusable internal addresses.</td></tr>
+          <tr><td>At the boundary router</td><td>Translation point</td><td>The router prepares traffic for the public Internet.</td></tr>
+          <tr><td>On the public Internet</td><td><b>Public</b> address</td><td>Only globally routable addresses can travel across the Internet.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout"><b>Real-world example:</b> Your phone might have <code>192.168.1.24</code> at home. That address is perfectly valid inside your home, but it is not globally unique and cannot be used directly as your identity on the public Internet.</div>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> RFC 1918 makes large-scale address reuse possible by reserving private address blocks for internal networks. The addresses are useful locally, but they are not meant to be advertised across the public Internet.
+      </div>
+    </section>
+
+    <section id="nat-napt" data-search="nat napt network address translation port translation rfc 3022 public private ip shortage">
+      <h2>4. NAT and NAPT</h2>
+      <p><b>Network Address Translation (NAT)</b> is the third part of the short-term IPv4 survival strategy described in the slides. NAT translates addresses from one address block to another so internal hosts can communicate externally without each one needing its own public IP address.</p>
+
+      <h3>Core NAT idea</h3>
+      <p>At the boundary of a network, a router can replace a private source IP address with a public one before forwarding traffic to the Internet. When replies come back, the router reverses that translation and sends the reply to the correct internal device.</p>
+
+      <h3>Why NAT became so common</h3>
+      <ul>
+        <li>It works with existing IPv4 networks.</li>
+        <li>It requires no changes to most end hosts.</li>
+        <li>It allows many internal systems to share a limited pool of public addresses.</li>
+        <li>It became commercially successful even though many network purists dislike that it breaks strict end-to-end addressing.</li>
+      </ul>
+
+      <h3>Visual walkthrough: basic NAT operation</h3>
+      <table>
+        <thead>
+          <tr><th>Stage</th><th>Before translation</th><th>After translation</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Outbound request</td>
+            <td>Client sends from <code>192.168.1.10</code></td>
+            <td>Router rewrites source as its public IP, such as <code>203.0.113.7</code></td>
+            <td>Makes the packet routable on the public Internet</td>
+          </tr>
+          <tr>
+            <td>Router bookkeeping</td>
+            <td>Router records the mapping</td>
+            <td>Router stores which internal host started the flow</td>
+            <td>Allows reply traffic to be sent back correctly</td>
+          </tr>
+          <tr>
+            <td>Inbound response</td>
+            <td>Server replies to <code>203.0.113.7</code></td>
+            <td>Router translates destination back to <code>192.168.1.10</code></td>
+            <td>Delivers the response to the right internal host</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>NAT in use</h3>
+      <p>The slides emphasize that a <b>single external address</b> can support many internal clients. This works especially well for outbound traffic such as web browsing, email, and app connections initiated from inside the network.</p>
+
+      <h3>NAPT: adding ports to the translation</h3>
+      <p><b>Network Address Port Translation (NAPT)</b> extends NAT by translating not just IP addresses but also <b>port numbers</b>. This is what makes large-scale sharing truly practical: the router can distinguish multiple simultaneous connections coming from different internal devices, even if they all share one public IP address.</p>
+
+      <table>
+        <thead>
+          <tr><th>Internal flow</th><th>Translated public flow</th><th>How the router distinguishes it</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>192.168.1.10:51514 -> web server:443</code></td><td><code>203.0.113.7:40001 -> web server:443</code></td><td>Mapped public source port <code>40001</code></td></tr>
+          <tr><td><code>192.168.1.11:51515 -> web server:443</code></td><td><code>203.0.113.7:40002 -> web server:443</code></td><td>Mapped public source port <code>40002</code></td></tr>
+        </tbody>
+      </table>
+
+      <p>The deck notes that an address can support up to <b>65,536</b> separate connections to each remote host because port numbers expand the number of unique conversation identifiers.</p>
+
+      <div class="callout"><b>Real-world example:</b> In a family home, a laptop streaming video, a phone browsing social media, and a smart TV downloading updates can all use the same public IP address. The router keeps them separate by tracking port translations.</div>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> NAT makes private-addressed networks usable on the Internet, and NAPT makes address sharing highly efficient by translating ports as well as IP addresses.
+      </div>
+    </section>
+
+    <section id="dns" data-search="dns domain name system hostname lookup resolver nameserver root zone ttl ns soa mx dig trace">
+      <h2>5. DNS (Domain Name System)</h2>
+      <p><b>DNS</b> exists because humans remember names much more easily than numeric IP addresses. Computers use IP addresses for routing, but users prefer names such as <b>www.usf.edu</b>. DNS bridges that gap.</p>
+
+      <h3>Why a name service was needed</h3>
+      <p>Early Internet users could maintain a local <b>hosts file</b> that mapped names to addresses. That worked when the Internet was small. As more systems appeared, it stopped scaling because every user would need a constantly updated local copy of all name-to-IP mappings.</p>
+      <p>DNS solves that scaling problem by creating a <b>distributed hierarchy</b> where naming responsibility is delegated.</p>
+
+      <h3>Hierarchical naming model</h3>
+      <p>The slides show names arranged from general to specific as you move from right to left:</p>
+      <table>
+        <thead>
+          <tr><th>Example name</th><th>Meaning</th><th>Administrative interpretation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>.</code></td><td>The root of the DNS hierarchy</td><td>The entire naming system begins here</td></tr>
+          <tr><td><code>.edu</code></td><td>Top-level domain (TLD)</td><td>One major branch under the root</td></tr>
+          <tr><td><code>usf.edu</code></td><td>Child of <code>.edu</code></td><td>An institution under the education TLD</td></tr>
+          <tr><td><code>coba.usf.edu</code></td><td>Child of <code>usf.edu</code></td><td>A more specific organizational unit under USF</td></tr>
+        </tbody>
+      </table>
+
+      <h3>What “domain” means</h3>
+      <p>Each name in the hierarchy is a <b>domain</b>, and each domain can manage its own immediate subdomains. This is the core of DNS scalability: the root does not need to manage every host on Earth. It only delegates responsibility downward.</p>
+
+      <h3>Top-level domains (TLDs)</h3>
+      <table>
+        <thead>
+          <tr><th>Category</th><th>Examples</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Open domains</b></td><td><code>.com</code>, <code>.org</code>, <code>.net</code>, <code>.info</code></td><td>Broadly available for registration</td></tr>
+          <tr><td><b>Limited domains</b></td><td><code>.edu</code>, <code>.gov</code>, <code>.mil</code>, <code>.int</code>, <code>.pro</code></td><td>Restricted by type of institution or eligibility rules</td></tr>
+          <tr><td><b>Industry-specific domains</b></td><td><code>.aero</code>, <code>.travel</code></td><td>Target specific sectors</td></tr>
+          <tr><td><b>Country-code domains</b></td><td><code>.us</code>, <code>.cn</code>, <code>.af</code></td><td>Represent countries or territories</td></tr>
+        </tbody>
+      </table>
+
+      <h3>How a DNS lookup works</h3>
+      <p>A computer typically learns its DNS server through <b>DHCP</b>. When the user enters a URL, the local resolver asks that DNS server for the corresponding IP address. If the server already knows the answer (authoritatively or from cache), it responds immediately. If not, it performs more lookups.</p>
+
+      <h3>Visual walkthrough: recursive DNS query resolution</h3>
+      <table>
+        <thead>
+          <tr><th>Step</th><th>Who acts</th><th>What happens</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>User device</td><td>Asks its configured resolver for the IP of a hostname, such as <code>www.usf.edu</code>.</td></tr>
+          <tr><td>2</td><td>Resolver</td><td>If it has no cache entry, it asks the <b>root</b> which servers know about <code>.edu</code>.</td></tr>
+          <tr><td>3</td><td>Root server</td><td>Returns the authoritative name servers for <code>.edu</code>.</td></tr>
+          <tr><td>4</td><td>Resolver</td><td>Asks a <code>.edu</code> server which servers know about <code>usf.edu</code>.</td></tr>
+          <tr><td>5</td><td><code>.edu</code> server</td><td>Returns the authoritative name servers for <code>usf.edu</code>.</td></tr>
+          <tr><td>6</td><td>Resolver</td><td>Asks a <code>usf.edu</code> server for <code>www.usf.edu</code>.</td></tr>
+          <tr><td>7</td><td>Authoritative server</td><td>Returns the IP address, and the resolver sends it back to the user.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Understanding the <code>dig</code> examples in the slides</h3>
+      <p>The deck includes two important DNS outputs:</p>
+      <ul>
+        <li><b>A standard query</b> showing sections such as <b>QUESTION</b>, <b>ANSWER</b>, <b>AUTHORITY</b>, and <b>ADDITIONAL</b>.</li>
+        <li><b>A trace</b> showing how resolution moves from <b>root</b> to <b>TLD</b> to the target domain.</li>
+      </ul>
+
+      <table>
+        <thead>
+          <tr><th>DNS output section</th><th>What it tells you</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>QUESTION</b></td><td>The exact record being requested</td><td>Confirms what lookup was attempted</td></tr>
+          <tr><td><b>ANSWER</b></td><td>The returned mapping (for example, an A record)</td><td>This is the actual result the client needs</td></tr>
+          <tr><td><b>AUTHORITY</b></td><td>Which name servers are authoritative for the domain</td><td>Shows who controls the namespace</td></tr>
+          <tr><td><b>ADDITIONAL</b></td><td>Helpful extra records, often IPs of the authoritative servers</td><td>Reduces extra lookups and improves efficiency</td></tr>
+          <tr><td><b>TTL</b></td><td>How long the answer may be cached</td><td>Balances freshness against lookup overhead</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Why DNS helps with IP address volatility</h3>
+      <p>The “IP address volatility and the benefit of DNS” idea is central: an organization can change the IP address behind a service, but users can continue using the same domain name. DNS acts like a stable label even when the underlying address changes.</p>
+
+      <h3>Reading the DNS configuration (zone file)</h3>
+      <p>The slides show a simplified zone file. Here is a teaching-oriented interpretation:</p>
+      <table>
+        <thead>
+          <tr><th>Record / field</th><th>Meaning</th><th>Example use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>$TTL</b></td><td>Default cache lifetime for records</td><td>Resolvers may keep answers for one day if <code>86400</code></td></tr>
+          <tr><td><b>SOA</b> (Start of Authority)</td><td>Defines the primary authority for the zone</td><td>Identifies the primary nameserver and admin contact</td></tr>
+          <tr><td><b>Serial</b></td><td>Version number of the zone data</td><td>Secondary servers compare it to know when updates exist</td></tr>
+          <tr><td><b>NS</b></td><td>Name server record</td><td>Specifies authoritative DNS servers</td></tr>
+          <tr><td><b>MX</b></td><td>Mail exchanger record</td><td>Identifies where email for the domain should go</td></tr>
+          <tr><td><b>A</b></td><td>IPv4 host address record</td><td>Maps <code>www.example.com</code> to an IP address</td></tr>
+          <tr><td><b>Delegation via NS</b></td><td>Hands off a subdomain to another server</td><td><code>test.example.com</code> can be managed elsewhere</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout"><b>Real-world example:</b> A company can move its website from one cloud server to another. Users still type the same domain name; only the DNS A record changes behind the scenes.</div>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> DNS is a distributed naming system that scales by delegation. It turns human-friendly names into machine-usable IP addresses and hides address changes behind stable names.
+      </div>
+    </section>
+
+    <section id="home-networking" data-search="home networking router dhcp dns napt wan lan arin ipconfig">
+      <h2>6. Putting It Together: Home Networking</h2>
+      <p>This section is the practical synthesis of the earlier concepts. The slides show that a typical <b>wireless router</b> in a home is not just “a box that gives Wi-Fi.” It often performs several roles at once.</p>
+
+      <h3>What the home router is doing</h3>
+      <table>
+        <thead>
+          <tr><th>Router function</th><th>What it does in the home</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>DHCP server</b></td><td>Assigns private IP addresses to local devices</td><td>Lets new devices connect with zero manual setup</td></tr>
+          <tr><td><b>DNS forwarder / local DNS server</b></td><td>Passes name queries onward or caches them locally</td><td>Lets users reach sites by name</td></tr>
+          <tr><td><b>NAPT router</b></td><td>Shares one public IP across many internal devices</td><td>Makes Internet access feasible with limited public IPv4 space</td></tr>
+          <tr><td><b>Gateway</b></td><td>Acts as the default path out of the home network</td><td>Connects the LAN to the ISP and beyond</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Visual walkthrough: the three views shown in the slides</h3>
+      <table>
+        <thead>
+          <tr><th>View</th><th>What it reveals</th><th>Concept reinforced</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>1. <code>ipconfig</code> on a home computer</b></td><td>The device’s private IP, subnet mask, default gateway, and DNS</td><td>Shows what DHCP provided to the client</td></tr>
+          <tr><td><b>2. Router status page</b></td><td>The router’s internal and external interfaces</td><td>Shows that one device sits between LAN and WAN</td></tr>
+          <tr><td><b>3. External IP view</b></td><td>The public address visible to the outside world</td><td>Shows the address the ISP (and Internet) sees</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Why ARIN is mentioned</h3>
+      <p>The deck notes that the WAN IP address can be checked in <b>ARIN</b> records. This helps identify which organization owns the public address block, typically your ISP. In other words, the address you expose to the Internet usually belongs to your provider’s allocation, not permanently to your individual laptop.</p>
+
+      <div class="callout"><b>Real-world example:</b> At home, your laptop may show <code>192.168.0.14</code>, but websites on the Internet see the public IP of your router or ISP-facing connection. That difference exists because of private addressing plus NAPT.</div>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> A home network works because one boundary device combines DHCP, DNS assistance, default gateway behavior, and NAPT. It is the practical convergence point of the earlier support-service concepts.
+      </div>
+    </section>
+
+    <section id="routing-basics" data-search="routing basics switching router packet next hop path tracert">
+      <h2>7. Routing Basics</h2>
+      <p><b>Routing</b> means moving information from a source network to a destination network. It becomes necessary once communication leaves the local network and multiple network segments are involved.</p>
+
+      <h3>Why routing is different from switching</h3>
+      <p>The slides contrast <b>LAN switching</b> and <b>routing</b>:</p>
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>Switching</th><th>Routing</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Typical scope</td><td>Within one local network</td><td>Between different networks</td></tr>
+          <tr><td>Path complexity</td><td>Usually one internal path</td><td>Often multiple possible paths</td></tr>
+          <tr><td>Main decision</td><td>Forward within the same LAN</td><td>Choose the best next hop toward another network</td></tr>
+          <tr><td>Typical device</td><td>Switch</td><td>Router</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Why routers are more complex</h3>
+      <p>A switch mostly forwards traffic inside one broadcast domain. A router must make path decisions across networks. In large routed environments, multiple routes may exist, and the router must choose the best one based on available information and policy.</p>
+
+      <h3>Router roles in different environments</h3>
+      <ul>
+        <li><b>ISP routers</b> are often high-capacity, specialized infrastructure devices.</li>
+        <li><b>Home routers</b> are simpler and cheaper, but still perform real routing.</li>
+      </ul>
+
+      <div class="callout"><b>Real-world example:</b> Sending a file to a laptop on the same Wi-Fi network mostly involves local switching. Opening a site hosted in another city requires routing across many networks and routers, not just a single local path.</div>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> Switching is about forwarding inside a local network; routing is about choosing a path across multiple networks. The router’s key job is selecting the next hop toward the destination.
+      </div>
+    </section>
+
+    <section id="autonomous-systems" data-search="autonomous systems as bgp as number policy 5661">
+      <h2>8. Autonomous Systems (AS)</h2>
+      <p>The slides define an <b>Autonomous System (AS)</b> as the basic unit of Internet routing. An AS is a connected group of one or more IP prefixes that operates under a <b>single, clearly defined routing policy</b>.</p>
+
+      <h3>Why the AS concept matters</h3>
+      <p>The Internet is too large for every router to reason about every internal detail of every organization. Instead, routing treats each AS as a major administrative block. The outside world mainly needs to know <b>how to reach the AS</b>, not how that AS internally delivers traffic once it arrives.</p>
+
+      <h3>How the slides explain it</h3>
+      <p>The deck compares an AS to a <b>post office</b>. External senders care that mail reaches the correct post office; they do not need to know the exact local delivery route inside the final postal region.</p>
+
+      <h3>Important AS terms</h3>
+      <table>
+        <thead>
+          <tr><th>Term</th><th>Meaning</th><th>Example from the slides</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>AS number (ASN)</b></td><td>A globally unique identifier for an autonomous system</td><td>USF is shown as <b>AS 5661</b></td></tr>
+          <tr><td><b>AS path</b></td><td>The chain of ASes traffic may traverse</td><td>Example path includes AT&T, Cogent, then USF</td></tr>
+          <tr><td><b>Routing policy</b></td><td>The rules the AS uses for how it advertises and accepts routes</td><td>The slides emphasize “single and clearly defined” policy</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Reading the “AS around 131.247.0.0/16” idea</h3>
+      <p>The visualization slides are about identifying which autonomous systems surround a given IP block and how route advertisements reach it. Even if you do not see the full diagram, the teaching point is that a prefix can be reachable through multiple neighboring ASes, which creates path choices.</p>
+
+      <div class="callout"><b>Real-world example:</b> A university network, a major ISP, and a cloud provider can each be separate autonomous systems. Traffic moving from a student’s apartment ISP to the university may cross multiple AS boundaries before arriving.</div>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> Autonomous systems simplify Internet-scale routing by treating organizations and networks as policy-controlled units. Internet routing largely happens <b>between ASes</b>, not by exposing every internal router to the entire world.
+      </div>
+    </section>
+
+    <section id="routing-tables" data-search="routing table next hop metric path route selection routeviews tracert">
+      <h2>9. Routing Tables, Metrics, and Route Selection</h2>
+      <p>A router uses a <b>routing table</b> to decide where to send packets next. The router does not need to know the entire final journey in detail; it only needs to know the best <b>next hop</b> toward the destination.</p>
+
+      <h3>What a routing table stores</h3>
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Meaning</th><th>Why it matters</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Destination network</b></td><td>The prefix being reached</td><td>Defines which traffic the entry applies to</td></tr>
+          <tr><td><b>Next hop</b></td><td>The neighboring router to forward to</td><td>Tells the router where to send the packet next</td></tr>
+          <tr><td><b>Metric</b></td><td>A cost value for comparing routes</td><td>Helps choose the best path when multiple routes exist</td></tr>
+          <tr><td><b>Path</b></td><td>Often a route history or AS path</td><td>Useful for policy and understanding path structure</td></tr>
+        </tbody>
+      </table>
+
+      <h3>How to interpret the example route table</h3>
+      <p>The lecture includes several different routes to the same destination block (<code>131.247.0.0/16</code>). The important learning point is not memorizing the numbers - it is understanding that:</p>
+      <ul>
+        <li>Multiple valid routes can exist for the same prefix.</li>
+        <li>Different routes can have different next hops and different metrics.</li>
+        <li>Some routes may reach the destination through different neighboring ASes.</li>
+      </ul>
+
+      <h3>What a metric is</h3>
+      <p>A <b>metric</b> is a value that helps compare alternate routes. The slides mention hop count as a simple example, but administrators may also assign custom link costs. A lower metric generally means a preferred path, though the exact meaning depends on the protocol and policy.</p>
+
+      <h3>Route selection logic</h3>
+      <table>
+        <thead>
+          <tr><th>Decision step</th><th>What the router considers</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>All routes announced for the destination</td></tr>
+          <tr><td>2</td><td>The next hop associated with each route</td></tr>
+          <tr><td>3</td><td>The metric or cost of each path</td></tr>
+          <tr><td>4</td><td>The preferred route (often the lowest-cost or policy-preferred one)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Viewing routes in practice</h3>
+      <p>The slides recommend tools such as <b>tracert</b> (or traceroute) and web-based route visualizers. These tools help you observe how traffic appears to move from one point to another, hop by hop.</p>
+
+      <div class="callout"><b>Real-world example:</b> If you run <code>tracert</code> to a university website, you may see your home router first, then your ISP, then one or more transit networks, and only later the university network. That output gives you a practical picture of routing across multiple administrative domains.</div>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> Routers choose a path by comparing available route entries, especially <b>next hop</b> and <b>metric</b>. They do not “teleport” packets to the destination; they forward them one hop at a time.
+      </div>
+    </section>
+
+    <section id="routing-protocols" data-search="routing protocols bgp ospf exterior interior">
+      <h2>10. Routing Protocols</h2>
+      <p>The slides split routing protocols into two broad classes:</p>
+
+      <table>
+        <thead>
+          <tr><th>Protocol category</th><th>Scope</th><th>Example</th><th>Main purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Exterior routing protocols</b></td>
+            <td>Between autonomous systems</td>
+            <td><b>BGP</b> (Border Gateway Protocol)</td>
+            <td>Exchange routes across organizational boundaries on the Internet</td>
+          </tr>
+          <tr>
+            <td><b>Interior routing protocols</b></td>
+            <td>Within a single autonomous system</td>
+            <td><b>OSPF</b> (Open Shortest Path First)</td>
+            <td>Distribute path information inside one organization’s network</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>BGP in the context of this deck</h3>
+      <p>BGP is the protocol most associated with the inter-AS behavior described in the routing section. It is how autonomous systems advertise which prefixes they can reach and how they are connected to one another.</p>
+
+      <h3>OSPF in the context of this deck</h3>
+      <p>OSPF is given as the example of a protocol used inside an AS. Once traffic reaches an organization, internal routing still has to deliver the packet to the correct destination network. That is the type of job handled by interior routing protocols.</p>
+
+      <div class="callout"><b>Real-world example:</b> A cloud provider may use BGP to talk to other networks on the Internet, but inside its own data center environment it may rely on internal protocols to move traffic among its own routers and subnets.</div>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> The Internet uses different routing protocols for different scopes: <b>BGP</b> for communication between autonomous systems and <b>OSPF</b> (as the lecture example) for routing within one autonomous system.
+      </div>
+    </section>
+
+    <section id="study-checklist" data-search="study checklist exam review key terms">
+      <h2>11. Exam-Focused Study Checklist</h2>
+      <h3>Know these definitions clearly</h3>
+      <ul>
+        <li><b>DHCP</b> - automatic assignment of IP configuration, often using leases.</li>
+        <li><b>RFC 1918 private addresses</b> - reusable internal IPv4 address ranges.</li>
+        <li><b>NAT</b> - translation between address spaces.</li>
+        <li><b>NAPT</b> - translation of both address and port, enabling large-scale sharing of one public IP.</li>
+        <li><b>DNS</b> - distributed system for translating names to IP addresses.</li>
+        <li><b>Routing</b> - moving packets between networks by choosing next hops.</li>
+        <li><b>Autonomous System</b> - a routing-policy unit on the Internet with a unique AS number.</li>
+        <li><b>Routing metric</b> - cost used to compare alternative routes.</li>
+      </ul>
+
+      <h3>Be ready to explain these relationships</h3>
+      <ul>
+        <li>How <b>DHCP</b> often provides the address of the <b>DNS server</b>.</li>
+        <li>Why <b>RFC 1918</b> addressing usually requires <b>NAT/NAPT</b> for Internet access.</li>
+        <li>Why <b>DNS</b> helps even when server IP addresses change.</li>
+        <li>Why a <b>router</b> is different from a <b>switch</b>.</li>
+        <li>Why <b>BGP</b> is associated with communication between <b>autonomous systems</b>.</li>
+      </ul>
+
+      <h3>Likely instructor-style short-answer prompts</h3>
+      <table>
+        <thead>
+          <tr><th>Possible question</th><th>What a strong answer should mention</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Why is DHCP needed?</td><td>Manual assignment causes errors; DHCP automates address and option delivery, often by lease.</td></tr>
+          <tr><td>Why are private addresses useful?</td><td>They allow address reuse and reduce pressure on public IPv4 space.</td></tr>
+          <tr><td>What problem does NAT solve?</td><td>It lets private-addressed internal devices communicate externally using limited public addresses.</td></tr>
+          <tr><td>What does DNS provide?</td><td>Human-friendly naming with hierarchical, delegated resolution to IP addresses.</td></tr>
+          <tr><td>How do routers choose among multiple paths?</td><td>They compare route entries using metrics/policy and choose a best next hop.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="takeaway">
+        <b>Key Takeaway:</b> For exams, do not memorize isolated acronyms. Focus on the <b>problem each service solves</b> and how the services work together in a real network.
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  const searchBox = document.getElementById('searchBox');
+  const sections = Array.from(document.querySelectorAll('main section'));
+  searchBox.addEventListener('input', function () {
+    const q = this.value.trim().toLowerCase();
+    sections.forEach(sec => {
+      const hay = (sec.innerText + ' ' + (sec.dataset.search || '')).toLowerCase();
+      sec.classList.toggle('section-hidden', q && !hay.includes(q));
+    });
+  });
+</script>
+</body>
+</html>

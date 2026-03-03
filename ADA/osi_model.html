@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISM 6225 Study Notes - Networking Basics: OSI Model</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --card: #ffffff;
+      --ink: #111827;
+      --muted: #475569;
+      --line: #dbe3ee;
+      --accent: #2563eb;
+      --accent-2: #dbeafe;
+      --ok: #ecfeff;
+      --warn: #fff7ed;
+      --warn-border: #fdba74;
+      --ok-border: #93c5fd;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: #e5e7eb;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow: auto;
+      background: linear-gradient(180deg, var(--bg), var(--panel));
+      color: #e5e7eb;
+      padding: 24px 20px 32px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar h1 {
+      margin: 0 0 8px;
+      font-size: 1.25rem;
+      line-height: 1.35;
+    }
+    .sidebar .meta {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      margin-bottom: 18px;
+    }
+    .sidebar .meta strong { color: #fff; }
+    .sidebar input {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      outline: none;
+      margin: 8px 0 18px;
+    }
+    .sidebar input::placeholder { color: #cbd5e1; }
+    .nav-group {
+      margin-top: 12px;
+    }
+    .nav-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #93c5fd;
+      margin: 18px 0 10px;
+    }
+    .nav {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav li {
+      margin: 0 0 6px;
+    }
+    .nav a {
+      display: block;
+      color: #e5e7eb;
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.94rem;
+    }
+    .nav a:hover,
+    .nav a.active {
+      background: rgba(37,99,235,0.18);
+      color: #fff;
+    }
+    .main {
+      padding: 28px;
+    }
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+      margin-bottom: 20px;
+    }
+    .hero h2 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+    .hero p {
+      margin: 8px 0;
+      color: var(--muted);
+    }
+    .note-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .mini-card {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .mini-card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+    .study-section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.05);
+      margin-bottom: 18px;
+      scroll-margin-top: 16px;
+    }
+    .study-section h2 {
+      margin: 0 0 14px;
+      font-size: 1.7rem;
+      line-height: 1.2;
+    }
+    .study-section h3 {
+      margin: 24px 0 10px;
+      font-size: 1.14rem;
+      line-height: 1.35;
+    }
+    .study-section h4 {
+      margin: 18px 0 8px;
+      font-size: 1rem;
+    }
+    .study-section p {
+      margin: 10px 0;
+    }
+    .study-section ul {
+      margin: 8px 0 12px 20px;
+      padding: 0;
+    }
+    .study-section li {
+      margin: 6px 0;
+    }
+    .study-section code,
+    .inline-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 0.95em;
+    }
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--accent-2);
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+    }
+    .warning {
+      border-left-color: #f97316;
+      background: var(--warn);
+      border: 1px solid var(--warn-border);
+    }
+    .diagram {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 16px 0;
+    }
+    .diagram .diagram-title {
+      background: #f8fafc;
+      padding: 12px 14px;
+      font-weight: 700;
+      border-bottom: 1px solid var(--line);
+    }
+    .diagram .diagram-body {
+      padding: 12px 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+    }
+    .key-takeaway {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border: 1px solid var(--ok-border);
+      background: var(--ok);
+      border-radius: 12px;
+    }
+    .key-takeaway strong {
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .quick-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      background: #f8fafc;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .small {
+      font-size: 0.92rem;
+    }
+    .footer {
+      color: #475569;
+      font-size: 0.92rem;
+      padding: 8px 4px 30px;
+    }
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-right: none;
+      }
+      .main { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <h1>Networking Basics: OSI Model</h1>
+      <div class="meta">
+        <strong>Course:</strong> ISM 6225 - Application Development for Analytics<br />
+        <strong>Source deck:</strong> Based on Agrawal and Sharma, Prospect Press<br />
+        <strong>Format:</strong> Expanded study notes from the uploaded slides
+      </div>
+      <input id="searchBox" type="text" placeholder="Filter sections..." />
+      <div class="nav-group">
+        <div class="nav-label">Jump to section</div>
+        <ul class="nav" id="navList">
+          <li><a href="#overview">1. How to use these notes</a></li>
+          <li><a href="#core-ideas">2. Core networking ideas</a></li>
+          <li><a href="#physical-layer">3. Physical layer</a></li>
+          <li><a href="#data-link-layer">4. Data link layer</a></li>
+          <li><a href="#network-layer">5. Network layer</a></li>
+          <li><a href="#transport-layer">6. Transport layer</a></li>
+          <li><a href="#application-layer">7. Application layer</a></li>
+          <li><a href="#wan-note">8. Wide area networks note</a></li>
+          <li><a href="#exam-review">9. Exam review sheet</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="page">
+        <section class="hero">
+          <h2>Comprehensive Study Guide: Networking Basics and the OSI/TCP-IP View</h2>
+          <p>
+            These notes are built to replace re-reading the slide deck. They expand the lecture bullets into
+            connected explanations, add plain-language examples, and convert image-heavy slides into study-friendly
+            walkthroughs and tables.
+          </p>
+          <p class="small">
+            Important scope note: the agenda and final summary list <strong>Wide area networks</strong>, but the uploaded
+            deck does not contain substantive WAN teaching slides. A note about that appears near the end so you do not
+            assume you missed content.
+          </p>
+          <div class="note-strip">
+            <div class="mini-card">
+              <h3>Best way to study</h3>
+              <div class="small">Read section-by-section, then use the final review sheet for memorization and self-testing.</div>
+            </div>
+            <div class="mini-card">
+              <h3>Big exam theme</h3>
+              <div class="small">Every layer solves a different problem by adding exactly the information the next step needs.</div>
+            </div>
+            <div class="mini-card">
+              <h3>What to memorize</h3>
+              <div class="small">Layer roles, headers, CRC idea, IP structure, TCP reliability tools, HTTP request/response, URL syntax.</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="overview" class="study-section">
+          <h2>1. How to Use These Notes</h2>
+          <p>
+            The lecture is organized around the <strong>5-layer TCP/IP stack</strong> (application, transport, network,
+            data-link, physical), while also referencing the broader OSI framing. The key to mastering this material is
+            to keep asking one question: <strong>what problem is each layer trying to solve?</strong>
+          </p>
+          <ul>
+            <li><strong>Application layer</strong>: What task does the user want to perform?</li>
+            <li><strong>Transport layer</strong>: How do large conversations stay organized, reliable, and separated by app?</li>
+            <li><strong>Network layer</strong>: How does data find the right destination across multiple networks?</li>
+            <li><strong>Data-link layer</strong>: How do devices communicate reliably on the same local network?</li>
+            <li><strong>Physical layer</strong>: How do raw bits become signals on real media?</li>
+          </ul>
+          <div class="callout">
+            <strong>Study strategy:</strong> First learn the purpose of each layer, then learn the specific mechanisms
+            (for example: CRC at data-link, IP addressing at network, sequence numbers at transport, HTTP at application).
+          </div>
+          <div class="key-takeaway">
+            <strong>Key Takeaway:</strong><br />
+            Treat the course as a chain of problem-solving layers, not as a pile of disconnected protocols.
+          </div>
+        </section>
+
+        <section id="core-ideas" class="study-section">
+          <h2>2. Core Networking Ideas</h2>
+
+          <h3>2.1 Why computer networking matters</h3>
+          <p>
+            The deck emphasizes that a <strong>common set of networking technologies</strong> supports many applications:
+            email, instant messaging, browsing, and client-server systems. Because the underlying infrastructure is shared,
+            a single laptop can perform all of these roles using the same network stack.
+          </p>
+          <p>
+            Another major lecture claim is that the <strong>basic principles of networking have remained stable for decades</strong>.
+            Even though devices and speeds improve, the fundamental design logic - efficient sharing, layering, addressing,
+            error control, and signal transmission - remains the same.
+          </p>
+          <p><strong>Real-world example:</strong> Your laptop can send an email, join a Zoom call, and load a website at the same time because those applications all reuse the same TCP/IP foundations.</p>
+
+          <h3>2.2 The overarching design principle: efficient resource use</h3>
+          <p>
+            The lecture frames networking around <strong>resource utilization efficiency</strong>, especially efficient use
+            of communication links ("the cable plant"). Link capacity is expensive, so it is worth adding technical
+            complexity - such as routers and switching logic - if that complexity improves how well the network uses shared media.
+          </p>
+          <p>
+            A related secondary principle is to <strong>keep end-user equipment simple</strong> and hide complexity in
+            dedicated network devices.
+          </p>
+          <p><strong>Real-world example:</strong> Home users do not manually manage packet routing or collision handling. Those tasks are pushed into routers, switches, and network interface hardware.</p>
+
+          <h3>2.3 Packetization</h3>
+          <p>
+            <strong>Packetization</strong> means breaking user data into smaller pieces and packaging those pieces so they can
+            travel across the network and later be reassembled. Each packet has:
+          </p>
+          <ul>
+            <li><strong>Payload</strong>: the actual user data.</li>
+            <li><strong>Overhead</strong>: extra control information needed for delivery and reconstruction.</li>
+          </ul>
+          <p>
+            The lecture explains that packetization is preferred because communication links are expensive relative to switching.
+            This makes it better to share links efficiently, even if routers must do more work.
+          </p>
+          <p><strong>Real-world example:</strong> Shipping a whole warehouse as one giant container is risky and inflexible. Sending many labeled boxes is easier to route, recover, and redistribute. Networking works the same way.</p>
+
+          <h3>2.4 Why packetization is useful</h3>
+          <ul>
+            <li>Improves <strong>communication-link efficiency</strong>.</li>
+            <li>Makes it practical to use <strong>dedicated routers</strong>.</li>
+            <li>Helps eliminate <strong>single points of failure</strong>.</li>
+            <li>Makes data easier to transport and re-route.</li>
+          </ul>
+
+          <h3>2.5 Layering</h3>
+          <p>
+            <strong>Layering</strong> organizes networking functions hierarchically: lower layers provide services that
+            support higher layers. The lecture compares this to a corporate structure (workers support managers, managers
+            support executives) and to computing (applications rely on operating systems, which rely on drivers).
+          </p>
+          <p>
+            The biggest advantage is <strong>modularity</strong>. One layer can evolve without forcing changes in all other layers.
+            For example, the deck explicitly notes that moving from <strong>IPv4 to IPv6</strong> does not require rewriting
+            web browsers or email clients, and adding wireless networking does not change website URLs.
+          </p>
+          <p><strong>Real-world example:</strong> You can switch from Wi-Fi to Ethernet and still open the same website because application behavior stays stable even when lower-layer technology changes.</p>
+
+          <h3>2.6 The five core communication tasks and the header idea</h3>
+          <p>
+            The lecture reduces networking to five recurring tasks. Packets solve these tasks by carrying headers.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Networking task</th>
+                <th>What it means</th>
+                <th>Header information used</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Specify user needs</td>
+                <td>Describe what the application wants to do</td>
+                <td>User commands</td>
+              </tr>
+              <tr>
+                <td>Segmentation and reassembly</td>
+                <td>Break large data into smaller pieces, then restore it</td>
+                <td>Sequence numbers</td>
+              </tr>
+              <tr>
+                <td>Identifying and locating destination</td>
+                <td>Figure out where the data should go</td>
+                <td>Address</td>
+              </tr>
+              <tr>
+                <td>Error control</td>
+                <td>Detect damage and sometimes trigger correction</td>
+                <td>Error check</td>
+              </tr>
+              <tr>
+                <td>Signaling</td>
+                <td>Convert data into a transmittable physical form</td>
+                <td>None at this abstract level</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            The central design idea is that <strong>every layer adds the header information needed for its own task</strong>.
+            Routers and end systems inspect these headers to decide how to process the packet.
+          </p>
+
+          <h3>2.7 The 5-layer TCP/IP stack</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Main job</th>
+                <th>Typical header clue</th>
+                <th>Representative technologies in this deck</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Application</td>
+                <td>Specify user activity and commands</td>
+                <td>User commands</td>
+                <td>HTTP, SMTP, FTP, Telnet/SSH</td>
+              </tr>
+              <tr>
+                <td>Transport</td>
+                <td>Segmentation, reliability, flow control, app separation</td>
+                <td>Sequence numbers, ports, ACK/window info</td>
+                <td>TCP, UDP</td>
+              </tr>
+              <tr>
+                <td>Network</td>
+                <td>Locate destination across networks</td>
+                <td>Source and destination IP addresses</td>
+                <td>IP (IPv4, IPv6)</td>
+              </tr>
+              <tr>
+                <td>Data-link</td>
+                <td>Reliable transfer on the same local network</td>
+                <td>MAC addresses, frame check sequence</td>
+                <td>Ethernet</td>
+              </tr>
+              <tr>
+                <td>Physical</td>
+                <td>Transmit bits as physical signals</td>
+                <td>Signal form itself</td>
+                <td>Copper, fiber, signaling, multiplexing</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>2.8 Core Internet protocol principles</h3>
+          <ul>
+            <li>The Internet is a <strong>network of independent networks</strong>.</li>
+            <li>Each underlying network may use different local technology.</li>
+            <li>Many different applications should be able to reuse the same shared transport and network layers.</li>
+            <li>Routers benefit from a <strong>standardized message block</strong> because they can forward traffic in a uniform, "cookie-cutter" way regardless of application.</li>
+          </ul>
+          <p><strong>Real-world example:</strong> A company LAN, a university network, and a cell carrier can all be different internally, yet IP lets traffic move between them.</p>
+
+          <h3>2.9 Standards and RFCs</h3>
+          <p>
+            The deck points students to <strong>RFCs (Requests for Comment)</strong> as the public standards source for Internet
+            technologies. For exams, know that RFCs are where protocol behavior is formally specified.
+          </p>
+
+          <div class="key-takeaway">
+            <strong>Key Takeaway:</strong><br />
+            The entire networking stack exists to move data efficiently by splitting the problem into reusable layers,
+            each of which adds just enough control information to do its own job.
+          </div>
+        </section>
+
+        <section id="physical-layer" class="study-section">
+          <h2>3. Physical Layer</h2>
+
+          <h3>3.1 What the physical layer does</h3>
+          <p>
+            The physical layer provides <strong>transparent transmission of a bit stream</strong> over an actual communication medium.
+            This is the layer that interacts directly with nature. It is where bits become electrical, optical, or radio signals.
+          </p>
+          <p>
+            The lecture stresses that the physical layer is special because we are "at the mercy of nature." The properties
+            of the medium determine what signals are possible.
+          </p>
+          <p><strong>Real-world example:</strong> A bit sent through copper becomes a voltage pattern; the same bit sent through fiber becomes a light pattern.</p>
+
+          <h3>3.2 Data vs. signal</h3>
+          <p>
+            <strong>Data</strong> is the information itself (facts, characters, numbers, ideas). <strong>Signals</strong> are the
+            detectable transmitted energy used to carry that information.
+          </p>
+          <ul>
+            <li>Data in a spreadsheet is information.</li>
+            <li>The voltage on a wire carrying that spreadsheet's bits is a signal.</li>
+          </ul>
+          <p>
+            This distinction matters because the lecture explicitly says <strong>data cannot be transmitted directly</strong>;
+            it must first be converted into signals.
+          </p>
+
+          <h3>3.3 Media: copper and fiber</h3>
+          <p>
+            The two main media emphasized are <strong>copper wire</strong> and <strong>optical fiber</strong>.
+          </p>
+
+          <h4>Copper / UTP</h4>
+          <p>
+            In common networking cable, eight copper strands are organized into four twisted pairs. This is
+            <strong>UTP (Unshielded Twisted Pair)</strong>. Twisting reduces interference caused by induction.
+            Tighter twists support higher data rates.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Pair</th>
+                <th>Color code</th>
+                <th>Use in the slide</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Pair 1</td><td>White-Blue / Blue</td><td>Not assigned in this example</td></tr>
+              <tr><td>Pair 2</td><td>White-Orange / Orange</td><td>Transmit data</td></tr>
+              <tr><td>Pair 3</td><td>White-Green / Green</td><td>Receive data</td></tr>
+              <tr><td>Pair 4</td><td>White-Brown / Brown</td><td>Not assigned in this example</td></tr>
+            </tbody>
+          </table>
+
+          <p>
+            The deck contrasts <strong>Cat 3</strong> (slower) and <strong>Cat 5/Cat 5e</strong> (faster), and notes that
+            Cat5e commonly uses <strong>RJ-45 connectors</strong>.
+          </p>
+
+          <h4>Optical fiber</h4>
+          <p>
+            Optical fiber is described as a thin strand of glass that guides light. It can carry large volumes of data
+            across long distances, weighs less than copper, and is the dominant medium for long-distance traffic.
+          </p>
+          <p><strong>Real-world example:</strong> Inside a building, devices may connect over copper Ethernet. The building's aggregated traffic is then often carried over fiber to reach the broader network.</p>
+
+          <h3>3.4 Noise and why binary signaling matters</h3>
+          <p>
+            Noise can distort signals. For communication to be reliable, the receiver must still decide what bit pattern was intended.
+            The slides argue that <strong>binary signaling is more robust than multi-level signaling</strong> because fewer
+            signal levels are easier to distinguish in the presence of noise.
+          </p>
+          <p>
+            The lecture compares a <strong>2-level system</strong> (binary) against a <strong>3-level system</strong> (ternary)
+            and explicitly states that ternary systems are more error-prone.
+          </p>
+          <p><strong>Real-world example:</strong> It is easier to decide whether a light is "off" or "on" than to reliably distinguish among three close brightness levels in a noisy environment.</p>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: Binary vs. ternary detection</div>
+            <div class="diagram-body">
+              <ul>
+                <li>In the binary case, the receiver uses one decision threshold: below the line means 0, above means 1.</li>
+                <li>In the ternary case, the receiver needs multiple thresholds and narrower ranges.</li>
+                <li>As noise increases, those narrower ranges create more classification errors.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>3.5 Shannon-Hartley theorem</h3>
+          <p>
+            A visual slide introduces <strong>Shannon's theorem</strong> to answer a central question:
+            <strong>How much data can a medium carry?</strong>
+          </p>
+          <div class="callout">
+            <strong>Formula shown in the deck:</strong><br />
+            <span class="inline-code">C = B * log2(1 + S/N)</span><br />
+            where <strong>C</strong> is channel capacity in bits/second, <strong>B</strong> is bandwidth in Hertz, and
+            <strong>S/N</strong> is the signal-to-noise ratio (SNR).
+          </div>
+          <p>
+            The following example slide applies the formula to a phone line:
+          </p>
+          <ul>
+            <li><strong>B = 3400 Hz</strong></li>
+            <li><strong>SNR = 45 dB</strong>, so linear SNR is approximately <span class="inline-code">10^(45/10) = 31,622</span></li>
+            <li>Capacity is then about <strong>51,000 bps (51 kbps)</strong></li>
+          </ul>
+          <p>
+            The lecture explicitly states that this is the <strong>maximum data rate of phone modems</strong>.
+          </p>
+          <p><strong>Real-world example:</strong> Even if software is perfect, a phone line cannot exceed the physical information limit set by bandwidth and noise.</p>
+
+          <h3>3.6 Bandwidth and Hertz</h3>
+          <p>
+            The deck defines <strong>Hertz</strong> as cycles per second. A standard phone line example is given as
+            <strong>0 Hz to 3400 Hz</strong>, which yields a bandwidth of <strong>3400 Hz</strong>.
+          </p>
+
+          <h3>3.7 How signaling works end-to-end</h3>
+          <p>
+            The lecture's "Hello" example breaks signaling into a four-step path:
+          </p>
+          <ol>
+            <li>Encode letters as binary numbers.</li>
+            <li>Modulate a carrier signal using those binary numbers.</li>
+            <li>Demodulate at the receiver to recover binary numbers.</li>
+            <li>Decode the binary back into letters.</li>
+          </ol>
+          <p>
+            ASCII is presented as the standard encoding for common English characters (0-127), while
+            <strong>Unicode</strong> is used for nearly all languages and far larger character sets.
+          </p>
+          <p><strong>Real-world example:</strong> Typing "Hello" into a browser becomes character codes, then bits, then signals, and only later becomes text again on the receiving machine.</p>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: Amplitude modulation signaling</div>
+            <div class="diagram-body">
+              <p>
+                The visual slide shows a stream of bits mapped onto a wave whose amplitude varies over time.
+                The core point is not the exact waveform shape; it is that <strong>bit values are encoded into
+                a physical signal pattern</strong> that moves through the medium.
+              </p>
+            </div>
+          </div>
+
+          <h3>3.8 Receiver operation</h3>
+          <p>
+            The receiver tracks <strong>bit periods</strong>. If the expected wave is present in the bit window,
+            it interprets a 1; otherwise it interprets a 0. Those bits are then decoded back into characters.
+          </p>
+
+          <h3>3.9 Multiplexing</h3>
+          <p>
+            The section summary states that <strong>multiplexing enables efficient use of media</strong>. Even though the
+            slide text shown to you is brief, the exam idea is simple: one physical medium can carry more than one logical
+            stream when the signals are organized appropriately.
+          </p>
+          <p><strong>Real-world example:</strong> A single fiber backbone can carry aggregated traffic from many users at once instead of one dedicated line per person.</p>
+
+          <div class="key-takeaway">
+            <strong>Key Takeaway:</strong><br />
+            The physical layer is about converting bits into signals that survive real-world limits such as noise,
+            bandwidth, and the properties of copper or fiber.
+          </div>
+        </section>
+
+        <section id="data-link-layer" class="study-section">
+          <h2>4. Data-Link Layer</h2>
+
+          <h3>4.1 What the data-link layer does</h3>
+          <p>
+            The data-link layer transfers data <strong>between devices on the same network</strong> and detects
+            (and sometimes helps correct) errors introduced below it. In this deck, the dominant example is
+            <strong>Ethernet</strong>.
+          </p>
+          <p><strong>Real-world example:</strong> Two devices on the same office LAN communicate using Ethernet framing even before any Internet-wide routing is involved.</p>
+
+          <h3>4.2 Ethernet basics</h3>
+          <p>
+            Ethernet is presented as the most common end-user data-link technology. The lecture describes it as:
+          </p>
+          <ul>
+            <li><strong>Low-cost</strong></li>
+            <li><strong>High-speed</strong></li>
+            <li>Designed for relatively <strong>small local networks</strong></li>
+          </ul>
+          <p>
+            The deck gives one reference scale: an Ethernet network can be roughly <strong>100 meters in radius</strong>
+            with up to about <strong>250 devices</strong>.
+          </p>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: Early Ethernet</div>
+            <div class="diagram-body">
+              <p>
+                The historical diagram shows a shared "ether" cable with multiple stations attached to a common medium.
+                This helps explain why early Ethernet naturally behaved as a <strong>shared broadcast medium</strong>:
+                every attached station could "see" the traffic on the same cable.
+              </p>
+            </div>
+          </div>
+
+          <h3>4.3 Ethernet transmission and broadcast</h3>
+          <p>
+            When one machine (say PC A) wants to send to another (PC B), the sender first adds the destination's
+            Ethernet address. The lecture compares this to writing a "To:" address on an envelope.
+          </p>
+          <p>
+            But unlike postal mail, classic Ethernet uses <strong>broadcast behavior</strong>: the signal is placed on the
+            shared medium, so <strong>all attached stations receive the frame</strong>. Only the device whose address matches
+            the destination should accept it at the higher layers.
+          </p>
+          <p>
+            This design makes delivery simple, but every machine must spend effort inspecting frames that are not intended for it.
+            That is why the lecture notes Ethernet cannot scale indefinitely as one giant shared broadcast domain.
+          </p>
+          <p><strong>Real-world example:</strong> In a shared classroom LAN, every device can physically hear the transmission, but only the addressed NIC should treat the frame as relevant.</p>
+
+          <h3>4.4 CSMA/CD and collisions</h3>
+          <p>
+            If multiple senders talk at the same time on shared Ethernet, their signals interfere. This is a
+            <strong>collision</strong>. The lecture's solution is <strong>CSMA/CD</strong>:
+            <strong>Carrier Sense Multiple Access with Collision Detection</strong>.
+          </p>
+          <ul>
+            <li><strong>Carrier sense</strong>: transmit only when the medium seems quiet.</li>
+            <li><strong>Multiple access</strong>: many devices share the same medium.</li>
+            <li><strong>Collision detection</strong>: keep listening while sending; if a collision is detected, stop.</li>
+            <li>After a collision, wait and retry later.</li>
+          </ul>
+          <p><strong>Real-world example:</strong> It is like two people on a walkie-talkie channel: listen first, speak only if quiet, and if both speak at once, stop and try again.</p>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: Collision on shared Ethernet</div>
+            <div class="diagram-body">
+              <p>
+                The visual shows two PCs injecting data onto the same Ethernet backbone at the same time. Their frames overlap
+                in the medium, producing a collision. The point of the picture is to show that the conflict happens
+                <strong>on the shared cable itself</strong>, not inside either endpoint.
+              </p>
+            </div>
+          </div>
+
+          <h3>4.5 Error detection and why naive checks fail</h3>
+          <p>
+            Frames can be damaged by physical imperfections such as noise and power disturbances. The lecture first shows a
+            simple "sum the digits" check and then explains why it is <strong>too naive</strong>: different corruptions can
+            produce the same check value (error cancellation).
+          </p>
+          <p>
+            This motivates stronger error detection.
+          </p>
+
+          <h3>4.6 CRC (Cyclic Redundancy Check)</h3>
+          <p>
+            Ethernet uses <strong>CRC-32</strong> for frame error detection. The lecture emphasizes that CRC is the practical,
+            real-world standard used by commercial data communication technologies.
+          </p>
+          <ul>
+            <li>CRC-32 is described as <strong>99.99999998% reliable</strong> for errors longer than 32 bits.</li>
+            <li>It detects all errors affecting fewer than 33 bits.</li>
+            <li>It also detects all odd-number-of-bit errors.</li>
+          </ul>
+
+          <h4>CRC sender logic</h4>
+          <ol>
+            <li>Treat the user data as the dividend; the technology specifies a divisor of <strong>n + 1 bits</strong>.</li>
+            <li>Append <strong>n zeros</strong> to the data.</li>
+            <li>Perform <strong>modulo-2 division</strong> using XOR-style subtraction.</li>
+            <li>Append the remainder as the CRC field and send the frame.</li>
+          </ol>
+
+          <h4>CRC receiver logic</h4>
+          <ol>
+            <li>Divide the received data (including CRC) by the same divisor.</li>
+            <li>If the remainder is <strong>0</strong>, accept the data; otherwise reject it.</li>
+          </ol>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: CRC sender operation</div>
+            <div class="diagram-body">
+              <p>
+                The diagram labels four essential pieces: <strong>user data</strong>, the <strong>zeros appended</strong>,
+                the <strong>divisor</strong>, and the resulting <strong>CRC remainder</strong>. Read it left to right as:
+                append zeros -> divide -> keep the remainder -> attach the remainder to the outgoing frame.
+              </p>
+            </div>
+          </div>
+
+          <h3>4.7 Ethernet frame structure</h3>
+          <p>
+            By the time the lecture reaches frame structure, you have already seen destination address and CRC.
+            The frame includes other fields so the receiver knows when a frame starts, where it came from, and where it ends.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Size in the slide</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Preamble</td><td>7 bytes</td><td>Helps receiver synchronize with sender</td></tr>
+              <tr><td>SFD (Start Frame Delimiter)</td><td>1 byte</td><td>Marks the start of the frame</td></tr>
+              <tr><td>Destination address</td><td>6 bytes</td><td>Who should receive the frame</td></tr>
+              <tr><td>Source address</td><td>6 bytes</td><td>Where replies should go</td></tr>
+              <tr><td>Length/Type</td><td>2 bytes</td><td>Length information or payload type indicator</td></tr>
+              <tr><td>Data + padding</td><td>46-1500 bytes</td><td>Payload from upper layers, padded if too short</td></tr>
+              <tr><td>FCS</td><td>4 bytes</td><td>Frame Check Sequence (CRC result)</td></tr>
+            </tbody>
+          </table>
+
+          <p>
+            The preamble pattern shown in the deck is repeating <span class="inline-code">10101010</span>,
+            and the start frame delimiter is <span class="inline-code">10101011</span>.
+          </p>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: Ethernet frame layout</div>
+            <div class="diagram-body">
+              <ul>
+                <li>The frame begins with synchronization fields (preamble + SFD).</li>
+                <li>Address fields tell the NIC who sent the frame and who should receive it.</li>
+                <li>The payload is the data coming down from upper layers (for example, an IP packet).</li>
+                <li>The frame ends with the FCS, which lets the receiver test whether the frame was damaged in transit.</li>
+                <li>The slide also notes that bits within the frame are transmitted <strong>least significant bit first</strong>.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>4.8 Ethernet addressing</h3>
+          <p>
+            Ethernet addresses are <strong>48 bits long</strong>. The lecture notes:
+          </p>
+          <ul>
+            <li>All 1s in the destination address is the predefined <strong>broadcast address</strong> on the LAN.</li>
+            <li>Addresses can be <strong>universally administered</strong> (assigned by manufacturer).</li>
+            <li>They can also be <strong>locally administered</strong> (assigned by a network administrator).</li>
+          </ul>
+          <p>
+            The lecture also shows that MAC addresses are commonly written in <strong>hexadecimal</strong>:
+            48 bits are broken into twelve 4-bit groups, each represented by a hex digit.
+          </p>
+          <p><strong>Real-world example:</strong> A factory-assigned NIC address is like a serial number burned into the hardware.</p>
+
+          <h3>4.9 Hubs vs. switches</h3>
+          <p>
+            The deck explicitly contrasts old <strong>hubs</strong> and modern <strong>switches</strong>:
+          </p>
+          <ul>
+            <li><strong>Hub</strong>: sends data out to all connected computers.</li>
+            <li><strong>Switch</strong>: sends data only toward the intended destination.</li>
+          </ul>
+          <p>
+            This makes switching faster and much more efficient. The switch learns which devices are on which ports by
+            reading the <strong>source addresses</strong> of incoming frames and building a <strong>forwarding table</strong>.
+          </p>
+          <p><strong>Real-world example:</strong> A hub is like shouting the same message to every room in a building. A switch is like handing it only to the correct office.</p>
+
+          <div class="key-takeaway">
+            <strong>Key Takeaway:</strong><br />
+            The data-link layer makes local communication practical by packaging data into frames, handling collisions
+            on shared media, and detecting corruption with CRC.
+          </div>
+        </section>
+
+        <section id="network-layer" class="study-section">
+          <h2>5. Network Layer</h2>
+
+          <h3>5.1 What the network layer does</h3>
+          <p>
+            The network layer moves variable-length packets from a source network to a destination network
+            <strong>through one or more networks</strong>. The core job is <strong>routing</strong>, and the devices that perform it are <strong>routers</strong>.
+          </p>
+          <p><strong>Real-world example:</strong> Sending a packet from your home Wi-Fi to a university server involves multiple separate networks, so local Ethernet is not enough. Routing is required.</p>
+
+          <h3>5.2 Routing as a "road trip"</h3>
+          <p>
+            The lecture compares routing to a long road trip:
+          </p>
+          <ul>
+            <li>The <strong>source</strong> and <strong>final destination</strong> are like network-layer addresses.</li>
+            <li>Intermediate exits and local turns resemble lower-layer, local addressing decisions.</li>
+          </ul>
+          <p>
+            This is a strong exam analogy because it separates the big-picture destination from the local hop-by-hop mechanics.
+          </p>
+
+          <h3>5.3 Internet Protocol (IP)</h3>
+          <p>
+            The deck presents <strong>IP</strong> as the dominant network-layer protocol. It is specified in
+            <strong>RFC 791</strong> and is now used by default in all operating systems.
+          </p>
+          <p>
+            Conceptually, IP is responsible for adding source and destination addresses so routers can move data toward the right network.
+          </p>
+
+          <h3>5.4 IP packets live inside lower-layer frames</h3>
+          <p>
+            A key layering idea is that an <strong>IP packet is carried inside a data-link frame</strong>.
+            In other words, the network layer relies on the data-link layer to move each hop locally.
+          </p>
+          <p><strong>Real-world example:</strong> An IP packet crossing the Internet may be wrapped in one Ethernet frame on your LAN, then another frame type somewhere else, while the IP destination stays the same.</p>
+
+          <h3>5.5 IPv4 header walkthrough</h3>
+          <p>
+            The IPv4 header diagram in the deck highlights the fields most worth recognizing:
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Why it matters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Version</td><td>Identifies IP version</td></tr>
+              <tr><td>Header length</td><td>Tells where payload begins</td></tr>
+              <tr><td>Type of service</td><td>QoS-related handling hint</td></tr>
+              <tr><td>Total length</td><td>Total packet size</td></tr>
+              <tr><td>Identification / Flags / Fragment offset</td><td>Used when packets are fragmented and reassembled</td></tr>
+              <tr><td>Time to live (TTL)</td><td>Limits how long a packet can circulate</td></tr>
+              <tr><td>Protocol</td><td>Indicates the upper-layer protocol (for example TCP or UDP)</td></tr>
+              <tr><td>Header checksum</td><td>Error check for the IPv4 header</td></tr>
+              <tr><td>Source address / Destination address</td><td>Core routing identity</td></tr>
+              <tr><td>Options / Padding</td><td>Optional control information and alignment</td></tr>
+            </tbody>
+          </table>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: IPv4 header</div>
+            <div class="diagram-body">
+              <p>
+                Read the IPv4 header as a compact summary that answers: what version is this, how long is it,
+                who sent it, where is it going, how should it be handled, and which upper-layer protocol should
+                receive the payload next.
+              </p>
+            </div>
+          </div>
+
+          <h3>5.6 IP addressing fundamentals</h3>
+          <p>
+            An IP address is a <strong>unique label used to locate a network interface</strong>. In IPv4, the source and
+            destination address fields are <strong>32 bits</strong> each.
+          </p>
+          <p>
+            The lecture explicitly distinguishes IP addresses from MAC addresses:
+          </p>
+          <ul>
+            <li><strong>MAC addresses</strong> are hardware-oriented link-layer identifiers.</li>
+            <li><strong>IP addresses</strong> are assigned by administrators and are flexible.</li>
+          </ul>
+
+          <h3>5.7 Binary numbers and dotted decimal notation</h3>
+          <p>
+            Because IP is fundamentally binary, the lecture spends time on decimal-to-binary and binary-to-decimal conversion.
+            The exam implication is clear: you should be comfortable with <strong>8-bit binary values</strong>.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Bits available</th>
+                <th>Number of distinct labels</th>
+                <th>Rule</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>2</td><td>2^1</td></tr>
+              <tr><td>2</td><td>4</td><td>2^2</td></tr>
+              <tr><td>3</td><td>8</td><td>2^3</td></tr>
+              <tr><td>n</td><td>2^n</td><td>General pattern</td></tr>
+            </tbody>
+          </table>
+
+          <p>
+            IPv4 addresses are written in <strong>dotted decimal notation</strong>: 32 bits are split into four 8-bit chunks,
+            each chunk is converted to decimal, and the four decimals are separated by dots.
+          </p>
+          <p><strong>Example from the deck style:</strong> <span class="inline-code">192.168.1.5</span></p>
+
+          <h3>5.8 IP address structure: network part + host part</h3>
+          <p>
+            A major conceptual point in the lecture is that IP addresses are <strong>structured</strong>, not assigned randomly.
+            They are split into:
+          </p>
+          <ul>
+            <li><strong>Network part</strong>: identifies the organization or network.</li>
+            <li><strong>Host part</strong>: identifies the individual device within that network.</li>
+          </ul>
+          <p>
+            The lecture reinforces this using analogies:
+          </p>
+          <ul>
+            <li><strong>Street address</strong>: street name = network; house number = host.</li>
+            <li><strong>Phone number</strong>: area code / exchange / local number reflect hierarchy.</li>
+            <li><strong>Credit card number</strong>: issuer information first, account-specific bits later.</li>
+            <li><strong>ZIP code</strong>: broader region first, finer destination later.</li>
+          </ul>
+          <p><strong>Real-world example:</strong> A university may own a network block, then allocate individual host addresses inside that block to labs, offices, or departments.</p>
+
+          <h3>5.9 Special IPv4 addresses</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Address pattern</th>
+                <th>Meaning in the lecture</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>255.255.255.255</td><td>Broadcast on the local network</td></tr>
+              <tr><td>0.0.0.0</td><td>Default route / unspecified source in some contexts</td></tr>
+              <tr><td>127.0.0.1</td><td>Localhost (this computer)</td></tr>
+              <tr><td>All 0s in host part</td><td>Network address</td></tr>
+              <tr><td>All 1s in host part</td><td>Broadcast for that network</td></tr>
+            </tbody>
+          </table>
+
+          <h3>5.10 How organizations obtain IP addresses</h3>
+          <p>
+            The lecture lists the major <strong>regional registries</strong> that distribute IP space:
+            ARIN, RIPE NCC, APNIC, LACNIC, and AfriNIC.
+          </p>
+          <p>
+            Large carriers generally receive large blocks directly because that simplifies routing. Most organizations
+            then receive addresses from those carriers (ISPs), rather than directly from the top-level registries.
+          </p>
+
+          <h3>5.11 IPv4 exhaustion and why IPv6 exists</h3>
+          <p>
+            The lecture states that IPv4's main limitation is that the address pool is running out.
+            IPv4 provides <strong>2^32 = 4,294,967,296</strong> addresses - about 4 billion total.
+          </p>
+          <p>
+            The deck also notes that allocation inefficiency means the world can run out of usable IPv4 space
+            well before 100% of the raw pool is productively used.
+          </p>
+
+          <h3>5.12 IPv6 overview</h3>
+          <p>
+            <strong>IPv6</strong> is introduced primarily as the answer to address exhaustion.
+            It is defined in <strong>RFC 2460</strong> and:
+          </p>
+          <ul>
+            <li>Expands source and destination addresses</li>
+            <li>Simplifies router processing</li>
+            <li>Removes the IPv4 header checksum</li>
+            <li>Adds features such as <strong>flow labels</strong></li>
+          </ul>
+
+          <p>
+            The new address pool is <strong>2^128</strong>, which the lecture emphasizes by noting the enormous number of
+            possible addresses per square meter of the Earth's surface.
+          </p>
+
+          <h3>5.13 IPv6 header walkthrough</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Field</th>
+                <th>Meaning from the deck</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Version</td><td>Value is 6</td></tr>
+              <tr><td>Traffic class</td><td>Service priority hint; similar to IPv4 TOS</td></tr>
+              <tr><td>Flow label</td><td>Lets sender mark packets for special handling</td></tr>
+              <tr><td>Payload length</td><td>Length of the packet's data</td></tr>
+              <tr><td>Next header</td><td>Identifies the transport-layer user of IP</td></tr>
+              <tr><td>Hop limit</td><td>IPv6 version of TTL</td></tr>
+              <tr><td>Source / Destination address</td><td>Expanded 128-bit addresses</td></tr>
+            </tbody>
+          </table>
+
+          <h3>5.14 IPv6 notation and compaction rules</h3>
+          <p>
+            IPv6 addresses are written as <strong>8 groups of 4 hexadecimal characters</strong>. Each hex digit represents 4 bits,
+            which is why eight groups of four digits can represent 128 bits total.
+          </p>
+          <p>
+            The deck's compaction rules are important exam material:
+          </p>
+          <ul>
+            <li>Omit <strong>leading zeros</strong> inside a 16-bit field.</li>
+            <li>A field of <span class="inline-code">0000</span> should be written as <span class="inline-code">0</span>.</li>
+            <li><span class="inline-code">::</span> represents consecutive zero fields and can appear <strong>only once</strong>.</li>
+            <li>It must be used to compress the <strong>largest possible run</strong> of zero fields.</li>
+            <li>If there is a tie, use the <strong>first possible</strong> occurrence.</li>
+            <li>Hex letters <strong>a-f</strong> should be lowercase.</li>
+          </ul>
+          <p><strong>Example from the deck:</strong> <span class="inline-code">2001:0db8:aaaa:0000:0000:0000:eeee:0001</span> becomes <span class="inline-code">2001:db8:aaaa::eeee:1</span>.</p>
+
+          <div class="key-takeaway">
+            <strong>Key Takeaway:</strong><br />
+            The network layer is the addressing and routing layer: it gives packets a global destination and guides them
+            across multiple networks, with IP as the core mechanism.
+          </div>
+        </section>
+
+        <section id="transport-layer" class="study-section">
+          <h2>6. Transport Layer</h2>
+
+          <h3>6.1 Why the transport layer is needed</h3>
+          <p>
+            The lecture's starting point is that <strong>IP is only best effort</strong>. It can send packets toward the correct
+            destination, but packets may be lost, duplicated, damaged, or arrive out of order.
+          </p>
+          <p>
+            This means most applications cannot rely on IP alone. The transport layer adds the missing controls:
+            segmentation, reliability, application separation, and flow regulation.
+          </p>
+          <p><strong>Real-world example:</strong> Downloading a 5,000,000-byte file over IP alone would be unsafe and awkward. Transport protocols break it up, track it, and make sure the receiver reconstructs it correctly.</p>
+
+          <h3>6.2 The transport layer's place in the stack</h3>
+          <p>
+            The transport layer sits between applications and IP. Many applications (HTTP, SMTP, SIP, and others) can
+            feed into the same transport layer, which then passes their traffic into IP.
+          </p>
+          <p>
+            This is one of the clearest examples of layering: <strong>many application protocols share the same transport service</strong>.
+          </p>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: Transport layer in the stack</div>
+            <div class="diagram-body">
+              <p>
+                The diagram shows multiple applications converging onto one transport layer, then down into IP,
+                then down into the local network. It visually explains why the transport layer is the shared
+                "middle manager" for end-to-end communication.
+              </p>
+            </div>
+          </div>
+
+          <h3>6.3 TCP overview</h3>
+          <p>
+            <strong>TCP (Transmission Control Protocol)</strong> is the primary transport protocol emphasized in the lecture.
+            It is defined in <strong>RFC 793</strong> and described as a highly reliable host-to-host transport protocol
+            over packet-switched networks.
+          </p>
+          <p>
+            The send/receive workflow is:
+          </p>
+          <ol>
+            <li>The application gives data to TCP.</li>
+            <li>TCP breaks it into segments and adds sequence numbers.</li>
+            <li>IP carries those segments onward.</li>
+            <li>The receiver's TCP collects segments, reorders them, and reassembles the original data.</li>
+          </ol>
+
+          <h3>6.4 TCP's five major jobs in this deck</h3>
+          <ul>
+            <li><strong>Segmentation</strong></li>
+            <li><strong>Reliability</strong></li>
+            <li><strong>Multiplexing</strong></li>
+            <li><strong>Flow control</strong></li>
+            <li><strong>Connection establishment</strong> (named in the overview and summary, though not expanded into a dedicated slide here)</li>
+          </ul>
+
+          <h3>6.5 Segmentation and sequence numbers</h3>
+          <p>
+            TCP allows applications to send data larger than one IP packet by breaking the data into segments.
+            Each segment receives a <strong>sequence number</strong>.
+          </p>
+          <p>
+            Sequence numbers help the receiver:
+          </p>
+          <ul>
+            <li>Reassemble segments in the correct order</li>
+            <li>Detect missing data</li>
+            <li>Detect duplicate segments</li>
+          </ul>
+          <p>
+            The lecture gives a concrete rule:
+            <span class="inline-code">next sequence number = previous sequence number + previous segment length</span>.
+          </p>
+          <p><strong>Real-world example:</strong> It is like numbering pages in a printed packet so the receiver can restore the correct order even if pages arrive mixed up.</p>
+
+          <h3>6.6 Reliability: ACKs, timeouts, and retransmission</h3>
+          <p>
+            TCP recovers from loss or damage using acknowledgments:
+          </p>
+          <ul>
+            <li>If data arrives correctly, the receiver sends a positive <strong>ACK</strong>.</li>
+            <li>If the sender does not receive that ACK within a timeout, it retransmits.</li>
+            <li>If duplicates show up, sequence numbers make them recognizable.</li>
+          </ul>
+          <p>
+            The deck also notes that TCP uses a <strong>checksum</strong> to detect serious damage. Damaged segments are discarded,
+            and the sender eventually retransmits because the expected ACK never arrives.
+          </p>
+          <p><strong>Real-world example:</strong> It is like sending certified mail and resending if the delivery confirmation never returns.</p>
+
+          <h3>6.7 Multiplexing and ports</h3>
+          <p>
+            Modern computers run many networked activities at once, so TCP uses <strong>port addresses</strong> to separate them.
+            Each port acts like a separate communication channel within one host.
+          </p>
+          <p>
+            An IP address plus a port is a <strong>socket</strong>. A pair of sockets uniquely identifies a connection.
+          </p>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: TCP ports and airport gates</div>
+            <div class="diagram-body">
+              <p>
+                The slide compares a computer to an airport. The computer's IP address is like the airport code,
+                while each port is like a gate. Multiple flights (connections) can pass through the same airport
+                at the same time because each one is assigned its own gate.
+              </p>
+            </div>
+          </div>
+
+          <p>
+            The OS chooses an available sender-side port, but the receiver must listen on a known port if clients are to find it.
+          </p>
+
+          <h4>Standard ports from the lecture</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Port</th>
+                <th>Service</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>80</td><td>HTTP (web)</td></tr>
+              <tr><td>25</td><td>SMTP (email)</td></tr>
+              <tr><td>443</td><td>HTTPS / SSL</td></tr>
+              <tr><td>445</td><td>Microsoft-DS (SMB)</td></tr>
+            </tbody>
+          </table>
+
+          <p>
+            The deck states that ports <strong>1-1023</strong> are typically reserved for defined services,
+            while applications generally use <strong>1024-65535</strong>.
+          </p>
+          <p>
+            It also notes that port assignments are standardized by <strong>IANA</strong>, and that service lists can be found in
+            <span class="inline-code">/etc/services</span> on Unix/Linux or the corresponding Windows services file.
+          </p>
+          <p>
+            Since port numbers are 16 bits long, the lecture points out that there are <strong>65,536 possible ports per host</strong>.
+          </p>
+
+          <h3>6.8 Flow control and the sliding window idea</h3>
+          <p>
+            Flow control exists because a slow receiver can become overwhelmed if the sender transmits too quickly.
+            TCP solves this by letting the receiver regulate how much data may be sent before more acknowledgment is required.
+          </p>
+          <p>
+            The simplest idea is <strong>stop-and-wait</strong>: send one segment, wait for ACK, send the next.
+            The lecture says this works but is very slow.
+          </p>
+          <p>
+            The more efficient design is to return a <strong>window</strong> with each ACK. The window tells the sender
+            how many bytes may be sent before waiting for more permission.
+          </p>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: TCP flow control with window size</div>
+            <div class="diagram-body">
+              <ul>
+                <li>The receiver advertises a window (example shown: 700 bytes).</li>
+                <li>The sender sends multiple segments as long as the total bytes stay within that window.</li>
+                <li>In the pictured example, segment 1 has sequence 1 and length 300; segment 2 has sequence 301 and length 320.</li>
+                <li>The receiver acknowledges up through byte 620 with <strong>ACK 621</strong>, meaning the next expected byte is 621.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p>
+            This creates the <strong>sliding window</strong>: the permitted send range moves forward as the receiver acknowledges data
+            or changes the allowed window size.
+          </p>
+          <p><strong>Real-world example:</strong> Think of a conveyor belt where the receiver controls how many boxes may be placed on the belt before asking the sender to pause.</p>
+
+          <h3>6.9 TCP header vs. UDP header</h3>
+          <p>
+            The header diagrams reinforce a major exam point: <strong>TCP carries more control information than UDP</strong>.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>TCP header fields highlighted in the deck</th>
+                <th>Why they exist</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Source port / Destination port</td><td>Application multiplexing</td></tr>
+              <tr><td>Sequence number</td><td>Ordering and loss recovery</td></tr>
+              <tr><td>Acknowledgment number</td><td>Positive acknowledgment</td></tr>
+              <tr><td>Data offset</td><td>Where payload begins</td></tr>
+              <tr><td>Flags (URG, ACK, PSH, RST, SYN, FIN)</td><td>Connection and control signaling</td></tr>
+              <tr><td>Window</td><td>Flow control</td></tr>
+              <tr><td>Checksum</td><td>Error detection</td></tr>
+              <tr><td>Urgent pointer</td><td>Urgent-data support</td></tr>
+              <tr><td>Options / Padding</td><td>Extensibility and alignment</td></tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead>
+              <tr>
+                <th>UDP header fields highlighted in the deck</th>
+                <th>Why they exist</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Source port / Destination port</td><td>Basic app identification</td></tr>
+              <tr><td>Length</td><td>Payload size</td></tr>
+              <tr><td>Checksum</td><td>Basic integrity check</td></tr>
+            </tbody>
+          </table>
+
+          <h3>6.10 UDP: when less is more</h3>
+          <p>
+            <strong>UDP</strong> is defined in <strong>RFC 768</strong>. The lecture frames it as the lighter-weight option for
+            applications that do not need TCP's full overhead.
+          </p>
+          <p>
+            By avoiding sequence tracking, window management, and related control state, UDP reduces protocol overhead.
+          </p>
+          <p><strong>Real-world example:</strong> A simple query/response or latency-sensitive exchange may prefer lower overhead over strict recovery behavior.</p>
+
+          <div class="warning callout">
+            <strong>Important exam nuance:</strong> The lecture summary mentions <strong>"why three-way handshake"</strong>,
+            but the uploaded deck portion does not include a dedicated handshake explanation slide. You should recognize it as part
+            of TCP connection establishment, but the detailed handshake sequence is not explicitly spelled out in the provided content.
+          </div>
+
+          <div class="key-takeaway">
+            <strong>Key Takeaway:</strong><br />
+            The transport layer turns best-effort packet delivery into usable application communication by handling order,
+            reliability, port separation, and receiver-driven flow control.
+          </div>
+        </section>
+
+        <section id="application-layer" class="study-section">
+          <h2>7. Application Layer</h2>
+
+          <h3>7.1 What the application layer does</h3>
+          <p>
+            The application layer defines the <strong>end-user activity</strong> and the <strong>commands</strong> used to
+            support that activity. This is the layer the user directly interacts with.
+          </p>
+          <p>
+            The lecture explicitly notes that end users only "see" application interfaces. They do not directly see TCP or IP.
+          </p>
+          <p><strong>Real-world example:</strong> When a user clicks a link, they think "open this page," not "send TCP segments and route IP packets."</p>
+
+          <h3>7.2 Application protocols vs. lower-layer protocols</h3>
+          <p>
+            Unlike lower layers, where a smaller number of protocols provide broadly reusable services, the application layer
+            contains different protocols for different end-user tasks.
+          </p>
+          <ul>
+            <li><strong>SMTP</strong> for email transfer</li>
+            <li><strong>HTTP</strong> for the web</li>
+            <li><strong>FTP</strong> for file transfer</li>
+            <li><strong>Telnet</strong> for remote login (the lecture notes it is now superseded by SSH)</li>
+          </ul>
+          <p>
+            All of these still rely on the same underlying TCP or UDP services.
+          </p>
+
+          <h3>7.3 HTTP and the Web</h3>
+          <p>
+            The lecture says the web is the "lay person's interpretation of the Internet." In practice, that means
+            the most visible Internet activity for everyday users is retrieving information using <strong>HTTP</strong>.
+          </p>
+          <p>
+            The deck's examples include shopping, social sites, and assignments, which all reinforce the same idea:
+            HTTP is a general-purpose content retrieval protocol used everywhere.
+          </p>
+
+          <h3>7.4 Web structure and hyperlinks</h3>
+          <p>
+            The web is described as a set of pages linked by <strong>hyperlinks</strong>. Because linked pages can be anywhere
+            in the world, the collection forms a "world wide web."
+          </p>
+          <p>
+            The key functional feature of a web page is that one information item can immediately lead to another.
+          </p>
+          <p><strong>Real-world example:</strong> Clicking "Those who bought this also bought..." follows hyperlinks that connect related pages and data.</p>
+
+          <h3>7.5 HTML as the page format</h3>
+          <p>
+            Web pages are written in <strong>HTML (HyperText Markup Language)</strong>. The example in the deck shows the basic
+            structure:
+          </p>
+          <ul>
+            <li><span class="inline-code">&lt;html&gt;</span> wraps the document</li>
+            <li><span class="inline-code">&lt;head&gt;</span> contains metadata like the title</li>
+            <li><span class="inline-code">&lt;body&gt;</span> contains visible content</li>
+            <li><span class="inline-code">&lt;a href="..."&gt;</span> creates a hyperlink</li>
+          </ul>
+          <p><strong>Real-world example:</strong> A heading that links to a university homepage uses an anchor tag so a click triggers a new HTTP request.</p>
+
+          <h3>7.6 HTTP as request/response</h3>
+          <p>
+            The lecture defines HTTP (via RFC 2616 in the slide set) as a <strong>general-purpose data transfer protocol</strong>
+            based on a <strong>request/response model</strong>.
+          </p>
+          <ul>
+            <li>The <strong>client</strong> sends a request.</li>
+            <li>The <strong>server</strong> returns a status code, meta-information, and the data.</li>
+          </ul>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: HTTP example</div>
+            <div class="diagram-body">
+              <p>The visual request/response transcript can be read in three blocks:</p>
+              <ol>
+                <li><strong>Request line + request headers</strong>: for example <span class="inline-code">GET /index.html HTTP/1.1</span>, host, accepted formats, encoding preferences, cookies, and connection preferences.</li>
+                <li><strong>Status line + response headers</strong>: for example <span class="inline-code">HTTP/1.1 200 OK</span>, date, server, content length, content type, and related metadata.</li>
+                <li><strong>Body</strong>: the returned HTML document itself.</li>
+              </ol>
+              <p>
+                This picture matters because it makes clear that HTTP transfers not just content, but also
+                a large amount of <strong>metadata</strong> about the content.
+              </p>
+            </div>
+          </div>
+
+          <h3>7.7 HTTP features the lecture wants you to notice</h3>
+          <ul>
+            <li>HTTP responses include <strong>meta-information</strong> about the transferred data.</li>
+            <li>The client can know the content type in advance (text, PDF, JPG, etc.).</li>
+            <li>The transfer can be <strong>modified</strong> in transit at the protocol level, for example through compression.</li>
+          </ul>
+
+          <div class="diagram">
+            <div class="diagram-title">Diagram walkthrough: Content-Encoding for compression</div>
+            <div class="diagram-body">
+              <p>
+                The compression slide highlights the response header
+                <span class="inline-code">Content-Encoding: gzip</span>. The important point is that the server can tell the client
+                the body has been compressed, so the client knows it must decompress before interpreting the content.
+              </p>
+            </div>
+          </div>
+
+          <h3>7.8 URLs (Uniform Resource Locators)</h3>
+          <p>
+            A <strong>URL</strong> is the address used to access a web resource. The deck cites RFC 1738 and gives the syntax:
+          </p>
+          <div class="callout">
+            <span class="inline-code">protocol://host[:port]/[abs_path[?query]]</span>
+          </div>
+          <p>
+            This breaks a web address into:
+          </p>
+          <ul>
+            <li><strong>Protocol</strong>: how to communicate (for example, HTTP)</li>
+            <li><strong>Host</strong>: which server to contact</li>
+            <li><strong>Port</strong>: which service endpoint on that server (optional if default)</li>
+            <li><strong>Path</strong>: which resource on the server</li>
+            <li><strong>Query</strong>: extra request parameters</li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Example</th>
+                <th>What it means</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="inline-code">http://www.usf.edu:8080/acad_calendar.html</span></td>
+                <td>Fetch a specific page from host <span class="inline-code">www.usf.edu</span> on port 8080</td>
+              </tr>
+              <tr>
+                <td><span class="inline-code">http://www.usf.edu:8080/grades?fName=joe</span></td>
+                <td>Fetch from a path while supplying a query parameter</td>
+              </tr>
+              <tr>
+                <td><span class="inline-code">http://www.google.com/search?q=usf</span></td>
+                <td>Search query with <span class="inline-code">q=usf</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>7.9 URL defaults</h3>
+          <p>
+            Web servers often recognize <strong>default ports</strong> and <strong>default files</strong>.
+            The lecture gives the example:
+          </p>
+          <p>
+            <span class="inline-code">http://www.usf.edu</span> is treated the same as
+            <span class="inline-code">http://www.usf.edu:80/index.asp</span>
+          </p>
+          <p>
+            It also notes other default filenames such as <span class="inline-code">index.html</span> and
+            <span class="inline-code">index.php</span>.
+          </p>
+          <p>
+            The lecture finally shows that URL-style syntax can describe non-web network resources too, such as a database connection.
+          </p>
+
+          <div class="key-takeaway">
+            <strong>Key Takeaway:</strong><br />
+            The application layer is where user-facing tasks live. HTTP, HTML, hyperlinks, and URLs are the web-specific
+            pieces that make the Internet usable to ordinary users.
+          </div>
+        </section>
+
+        <section id="wan-note" class="study-section">
+          <h2>8. Wide Area Networks (WAN) Note</h2>
+          <p>
+            The agenda at the beginning of the deck and the final summary slide both list <strong>Wide area networks</strong>.
+            However, the uploaded file does <strong>not</strong> include substantive teaching slides for that topic.
+          </p>
+          <div class="warning callout">
+            <strong>What this means for studying:</strong><br />
+            Do not waste time searching this file for a hidden WAN section. Based on the provided deck, there is no detailed
+            WAN explanation to extract. If WAN is testable in your course, it likely comes from another lecture, another deck,
+            or a verbally covered section that is not included here.
+          </div>
+          <div class="key-takeaway">
+            <strong>Key Takeaway:</strong><br />
+            The deck signals WAN as part of the course scope, but this specific upload does not teach it in detail.
+          </div>
+        </section>
+
+        <section id="exam-review" class="study-section">
+          <h2>9. Exam Review Sheet</h2>
+
+          <h3>9.1 One-line layer memory aid</h3>
+          <div class="quick-grid">
+            <div class="quick-box"><strong>Physical:</strong> turn bits into signals.</div>
+            <div class="quick-box"><strong>Data-link:</strong> move frames on one local network and catch damage.</div>
+            <div class="quick-box"><strong>Network:</strong> address and route packets across networks.</div>
+            <div class="quick-box"><strong>Transport:</strong> make delivery usable for applications.</div>
+            <div class="quick-box"><strong>Application:</strong> define the user-visible service.</div>
+          </div>
+
+          <h3>9.2 High-yield facts to memorize</h3>
+          <ul>
+            <li><strong>Packetization</strong> = payload + overhead.</li>
+            <li><strong>Layering</strong> = lower layers support higher layers.</li>
+            <li><strong>Binary signaling</strong> is more robust than ternary in noise.</li>
+            <li><strong>Shannon-Hartley</strong> gives the theoretical capacity limit of a channel.</li>
+            <li><strong>UTP</strong> uses four twisted copper pairs; Cat5e commonly terminates in RJ-45.</li>
+            <li><strong>Ethernet</strong> is local, historically shared, and originally broadcast-based.</li>
+            <li><strong>CSMA/CD</strong> = listen first, detect collisions, stop, wait, retry.</li>
+            <li><strong>CRC</strong> is the practical Ethernet error-detection method.</li>
+            <li><strong>MAC</strong> is a local link-layer address; <strong>IP</strong> is the routable network-layer address.</li>
+            <li><strong>IPv4</strong> is 32-bit; <strong>IPv6</strong> is 128-bit.</li>
+            <li><strong>TCP</strong> adds sequence numbers, ACKs, ports, windows, and more.</li>
+            <li><strong>UDP</strong> keeps only basic fields and avoids most TCP overhead.</li>
+            <li><strong>HTTP</strong> is request/response and carries both data and metadata.</li>
+            <li><strong>URL syntax</strong> = protocol + host + optional port + path + optional query.</li>
+          </ul>
+
+          <h3>9.3 Likely conceptual questions</h3>
+          <ul>
+            <li>Why is packetization better than sending one giant block?</li>
+            <li>Why does layering make upgrades easier?</li>
+            <li>Why does binary signaling resist noise better?</li>
+            <li>Why can Ethernet broadcast on a LAN but not across the whole Internet?</li>
+            <li>Why is CRC better than a naive checksum idea?</li>
+            <li>Why do IP addresses have a network part and a host part?</li>
+            <li>Why is TCP needed if IP already exists?</li>
+            <li>Why do we need ports if each computer already has an IP address?</li>
+            <li>Why is sliding window better than stop-and-wait?</li>
+            <li>Why is HTTP more than "just the page body"?</li>
+          </ul>
+
+          <h3>9.4 The shortest possible full-stack story</h3>
+          <p>
+            A user clicks a link. The <strong>application layer</strong> creates an HTTP request. The <strong>transport layer</strong>
+            (usually TCP) splits it into segments, numbers them, and manages reliability. The <strong>network layer</strong>
+            gives those segments IP addresses so routers can move them across networks. The <strong>data-link layer</strong>
+            wraps each local hop in frames with MAC addresses and CRC. The <strong>physical layer</strong> turns the bits into
+            electrical, optical, or radio signals. The receiver reverses the whole process.
+          </p>
+
+          <div class="key-takeaway">
+            <strong>Key Takeaway:</strong><br />
+            If you can explain that one full-stack story clearly, you understand the architecture of the lecture.
+          </div>
+        </section>
+
+        <div class="footer">
+          Prepared as expanded study notes from the uploaded ISM 6225 "Networking Basics: OSI model" slide deck.
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const searchBox = document.getElementById('searchBox');
+    const sections = Array.from(document.querySelectorAll('.study-section'));
+    const navLinks = Array.from(document.querySelectorAll('#navList a'));
+
+    function normalize(text) {
+      return (text || '').toLowerCase();
+    }
+
+    function runFilter() {
+      const q = normalize(searchBox.value.trim());
+      sections.forEach(section => {
+        const text = normalize(section.innerText);
+        const match = q === '' || text.includes(q);
+        section.style.display = match ? '' : 'none';
+      });
+
+      navLinks.forEach(link => {
+        const target = document.querySelector(link.getAttribute('href'));
+        const visible = target && target.style.display !== 'none';
+        link.parentElement.style.display = visible ? '' : 'none';
+      });
+    }
+
+    searchBox.addEventListener('input', runFilter);
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(link => {
+          const active = link.getAttribute('href') === '#' + entry.target.id;
+          link.classList.toggle('active', active);
+        });
+      });
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>
