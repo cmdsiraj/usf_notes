@@ -2,8 +2,6 @@
 Here's the core idea in one sentence:
 > GraphRAG = Extract entities & relationships from your corpus → Build a knowledge graph → At query time, use the graph structure to retrieve richer, more connected context than chunks alone could ever give you.
 
-(Chunks → LLM extraction → Graph nodes & edges → Community detection → Community summaries)
-
 There are two distinct phases. Let's walk through them.
 ## Phase 1: The Indexing Pipeline
 This is where all the heavy lifting happens — offline, before any user asks a single question. This is also what makes GraphRAG expensive to set up but incredibly powerful at query time.
@@ -50,3 +48,18 @@ This is where GraphRAG gets elegant. It has **two fundamentally different retrie
 ___
 > **GraphRAG is not always the right tool.** If your queries are mostly specific factual lookups and your corpus is small, vanilla RAG is fine. GraphRAG earns its keep when your corpus is large, relationship-dense, and users ask complex cross-document questions.
 
+____
+# Summary/Important Points
+1. Chunks → LLM extraction → Graph nodes & edges → Community detection → Community summaries
+2. "Extraction quality is the single biggest lever on GraphRAG performance." When you build yours, you will spend the most time tuning that extraction prompt.
+3. Chunking is the foundation of the input. Extraction is the foundation of the graph. And the graph is everything.
+___
+# Example Question
+'What was the strategic reason the CEO gave for the Q3 revenue drop, and how does it connect to the supply chain issues in the risk section?' — Which strategy, and what specifically makes this question a GraphRAG strength vs. a vanilla RAG failure?
+**Answer:** Use local search — anchor to 'Q3' as an entity and traverse.
+**Reasoning:**
+**Failure mode 1 — Chunk isolation.** The CEO's strategic rationale lives in the CEO letter (page 2). The supply chain issues live in the risk section (page 130). No single chunk contains both. Vanilla RAG retrieves by similarity to the query — it might get the CEO letter chunk, or it might get the risk section chunk, but it has no mechanism to retrieve both and understand they're connected.
+
+**Failure mode 3 — Multi-hop reasoning.** The connection isn't stated anywhere explicitly. The answer emerges by traversing: `Q3 revenue drop` → `caused by` → `supply disruption` → `mentioned in` → `risk section` → `relates to` → `CEO strategic rationale`. That's a 3-hop chain. Vanilla RAG cannot walk that. GraphRAG traverses it in one local search.
+
+So this question is actually a double failure for vanilla RAG — chunk isolation AND multi-hop. GraphRAG solves both in one graph walk.
