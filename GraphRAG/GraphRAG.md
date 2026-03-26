@@ -1,6 +1,9 @@
 # GraphRAG Architecture — From the Ground Up
 Here's the core idea in one sentence:
 > GraphRAG = Extract entities & relationships from your corpus → Build a knowledge graph → At query time, use the graph structure to retrieve richer, more connected context than chunks alone could ever give you.
+___
+> Chunks → LLM extraction → Graph nodes & edges → Community detection → Community summaries
+___
 
 There are two distinct phases. Let's walk through them.
 ## Phase 1: The Indexing Pipeline
