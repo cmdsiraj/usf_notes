@@ -33,3 +33,17 @@ ___
 Now let me show you the full RAG failure landscape together:
 <img width="892" height="440" alt="image" src="https://github.com/user-attachments/assets/09d4deac-1bec-49e1-97bc-580e900b2244" />
 
+___
+## Summary of Failure Modes
+
+1. **Chunk Isolation**
+Problem → Each chunk is independent; system cannot connect related information across multiple chunks.
+
+2. **Keyword/Semantic Mismatch**
+Problem → Embeddings fail to match semantically equivalent phrases with different terminology (e.g., "liver damage" vs. "adverse hepatic outcomes").
+
+3. **Multi-Hop Reasoning**
+Problem → System cannot traverse relationship chains; it only retrieves chunks directly similar to the query, not chains of connected entities.
+
+4. **Big Picture Problem**
+Problem → System cannot synthesize global summaries or insights from a corpus; it can only retrieve what already exists as explicit chunks.
