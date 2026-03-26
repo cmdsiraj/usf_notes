@@ -9,6 +9,7 @@ Let me show you a concrete scenario:
 **Scenario:** You have a 200-page financial report. A user asks: "What was the strategic reason the CEO gave for the Q3 revenue drop, and how does it connect to the supply chain issues mentioned in the risk section?"
 This question requires synthesizing information from at least 3 different sections — the CEO letter (page 2), the revenue breakdown (page 47), and the risk factors (page 130). Your vector search will likely retrieve chunks that are semantically similar to the query... but they may not be the right 3 chunks, and even if they are, **they arrive with no structural relationship between them.**
 <img width="857" height="520" alt="image" src="https://github.com/user-attachments/assets/dcf4c80f-32bf-497d-9736-0fe167a53d55" />
+
 The key insight: **chunks are retrieved by semantic similarity to the query, not by their logical relationship to each other.** The CEO letter and the supply chain risk section might not be semantically close to each other or to the query — so they both miss the top-K cut.
 
 ## Failure Mode 2: Keyword/Semantic Mismatch
